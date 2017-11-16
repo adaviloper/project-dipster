@@ -1,0 +1,26 @@
+<img src="" alt="" class="test-image">
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+<script>
+    $('.test-image').attr('src', '/resources/assets/images/dog.png');
+    $('#image').on('input', function(){
+        console.log(this.value)
+    });
+    $('.submit').on('click', function(){
+        $.ajax({
+            url: '/test',
+            success: function(data){
+                data = data.replace(/\n/gi, '');
+                console.log('success!', ':'+data+':');
+            },
+            fail: function(){
+                console.log('success!');
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

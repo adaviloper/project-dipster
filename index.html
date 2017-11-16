@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
+    </head>
+    <body>
+        <section class="hero is-primary">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Spatial Filtering
+                    </h1>
+                    <h2 class="subtitle">
+                        Team Dipster
+                    </h2>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <div class="container">
+                <div class="columns">
+                    <div class="column">
+                        <form action="javascript:void(0)" enctype="application/x-www-form-urlencoded">
+                            <div class="field operation">
+                                <p>Operation</p>
+                                <span class="select is-fullwidth">
+                                    <label>
+                                        <select id="operation" name="operation" class="param">
+                                            <option selected="selected" value="filter">Correlation</option>
+                                            <option value="smoothing">Image smoothing</option>
+                                            <optgroup label="Sharpening">
+                                                <option value="laplacian">Laplacian</option>
+                                                <option value="unsharp">Unsharp mask and high boost</option>
+                                                <option value="first-order-derivatives">First order derivatives</option>
+                                            </optgroup>
+                                            <option value="statistical-order-filtering">Statistical Order Filtering</option>
+                                        </select>
+                                    </label>
+                                </span>
+                            </div>
+                            <div class="field image">
+                                <p>Image Name</p>
+                                <span class="select is-fullwidth">
+                                    <label>
+                                        <select id="image" name="image">
+                                            <option selected="selected" value="dog.png">Dog</option>
+                                            <option value="turkey.png">Turkey</option>
+                                            <option value="image_3">image3</option>
+                                            <option value="image_4">image4</option>
+                                            <option value="image_5">image5</option>
+                                        </select>
+                                    </label>
+                                </span>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-body">
+                                    <div class="field window-size-wrapper">
+                                        <p>Window Size</p>
+                                        <span class="select is-fullwidth">
+                                            <label>
+                                                <select id="windowSize" name="windowSize" class="param">
+                                                    <option selected="selected" value="3x3">3x3</option>
+                                                    <option value="5x5">5x5</option>
+                                                    <option value="7x7">7x7</option>
+                                                </select>
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="field statistical-filter-wrapper">
+                                        <p>Filter</p>
+                                        <span class="select is-fullwidth">
+                                            <label>
+                                                <select id="statistical-filter" name="statistical-filter" class="param">
+                                                    <option selected="selected" value="mean">Mean</option>
+                                                    <option value="median">Median</option>
+                                                    <option value="adaptive">Adaptive</option>
+                                                </select>
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="field smoothing-filter-wrapper">
+                                        <p>Mean Filter</p>
+                                        <span class="select is-fullwidth">
+                                            <label>
+                                                <select id="smoothing-filter" name="smoothing-filter" class="param">
+                                                    <option selected="selected" value="1_9">1/9</option>
+                                                    <option value="1_16">1/16</option>
+                                                </select>
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="field order-wrapper">
+                                        <p>Order</p>
+                                        <p class="control">
+                                            <input id="order" type="text" class="input" placeholder="Order">
+                                        </p>
+                                    </div>
+                                    <div class="field cutoff-wrapper">
+                                        <p>Cutoff</p>
+                                        <p class="control">
+                                            <input id="cutoff" type="text" class="input" placeholder="Cutoff">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <button class="button is-primary is-fullwidth submit" id="submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <div class="container">
+                <div class="columns results-wrapper">
+                    <div class="column">
+                        <img src="" alt="" class="image source-image">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+                integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+                crossorigin="anonymous"></script>
+        <script src="resources/js/main.js"></script>
+    </body>
+</html>
