@@ -126,6 +126,7 @@ class Form {
                 console.log(paths);
                 $('.result-image').remove();
                 paths.forEach((path) => {
+//                console.log(path);
                     let imageHTML = '';
                     imageHTML += '<div class="column result-image">';
                     imageHTML += '<img src="' + path + '" alt="" class="image image-out">';

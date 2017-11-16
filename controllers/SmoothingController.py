@@ -19,7 +19,7 @@ class SmoothingController:
         #     print(params['image'])
         #     print('file does not exist')
         input_image = cv2.imread(image_path, 0)
-        image_output_path = 'controllers/assets/images/out/dog_out_Tyler.png'
+        image_output_path = 'controllers/assets/images/out/dog_out_Tyler_asdf.png'
         cv2.imwrite(image_output_path, input_image)
         view = View()
         output = view.render(message=[image_output_path])
