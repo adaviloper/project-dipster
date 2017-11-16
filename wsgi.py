@@ -15,6 +15,7 @@ router.get('/', 'ConvolutionCorrelationController@index')
 router.get('/sharpen', 'SharpeningController@sharpen')
 router.get('/filter', 'FilteringController@filtering')
 router.get('/smoothing', 'SmoothingController@smoothing')
+router.get('/statistical-order-filter', 'StatisticalOrderController@filter')
 
 
 def application(environ, start_response):

@@ -14,13 +14,13 @@ class Form {
     }
 
     setDefaultValues() {
-        let operationType = $('#operation').value;
-        let image = $('#image').value;
-        let cutoff = $('#cutoff').value || 0;
-        let windowSize = $('#windowSize').value || 0;
-        let statisticalFilter = $('#statistical-filter').value || 0;
-        let smoothingFilter = $('#smoothing-filter').value || 0;
-        let order = $('#order').value || 2;
+        let operationType = document.getElementById('operation').value;
+        let image = document.getElementById('image').value;
+        let cutoff = document.getElementById('cutoff').value || 0;
+        let windowSize = document.getElementById('windowSize').value || 0;
+        let statisticalFilter = document.getElementById('statistical-filter').value || 0;
+        let smoothingFilter = document.getElementById('smoothing-filter').value || 0;
+        let order = document.getElementById('order').value || 2;
         this.filterParams = {
             image,
             operationType,
@@ -34,14 +34,14 @@ class Form {
     }
 
     setEventListeners() {
-        this.operationTypeElem.addEventListener('input', event => this.updateOperationType(event));
-        this.imageElem.addEventListener('input', event => this.updateImage(event));
-        this.cutoffElem.addEventListener('input', event => this.validateCutoff(event));
-        this.orderElem.addEventListener('input', event => this.validateOrder(event));
-        this.windowSizeElem.addEventListener('input', event => this.validateWindowSize(event));
-        this.statisticalFilterElem.addEventListener('input', event => this.validateFilter(event));
-        this.smoothingFilterElem.addEventListener('input', event => this.validateFilter(event));
-        $('#submit').addEventListener('click', () => this.handleSubmit(event));
+        document.getElementById('operation').addEventListener('input', event => this.updateOperationType(event));
+        document.getElementById('image').addEventListener('input', event => this.updateImage(event));
+        document.getElementById('cutoff').addEventListener('input', event => this.validateCutoff(event));
+        document.getElementById('order').addEventListener('input', event => this.validateOrder(event));
+        document.getElementById('windowSize').addEventListener('input', event => this.validateWindowSize(event));
+        document.getElementById('statistical-filter').addEventListener('input', event => this.validateFilter(event));
+        document.getElementById('smoothing-filter').addEventListener('input', event => this.validateFilter(event));
+        document.getElementById('submit').addEventListener('click', () => this.handleSubmit(event));
     }
 
     /**
@@ -50,6 +50,8 @@ class Form {
      * Params: {
      *      Filter: [median, mean, adaptive]
      *      Window Size: [3x3, 5x5, and 7x7]
+     *      SSIM: Integer
+     *
      * }
      */
 
@@ -58,7 +60,7 @@ class Form {
      * For my parameters I just the image, window size, and which mean filter (the 1/9 or (1/16 we discussed on the slides)
      * Operation: Smoothing
      * Params: {
-     *      Mean Filter: [1/9, 1/16]
+     *      X - Mean Filter: [1/9, 1/16]
      *      Window Size: [3x3, 5x5, and 7x7]
      * }
      */
@@ -100,6 +102,7 @@ class Form {
 
     validateCutoff(event) {
         this.filterParams.cutoff = Form.sanitize(event.target.value);
+        this.cutoffElem.value = this.filterParams.cutoff;
     }
 
     validateOrder(event) {
@@ -121,9 +124,10 @@ class Form {
             success: function(data) {
                 let paths = data.slice(1).slice(0, -1).split("\n\n");
                 console.log(paths);
+                $('.result-image').remove();
                 paths.forEach((path) => {
                     let imageHTML = '';
-                    imageHTML += '<div class="column">';
+                    imageHTML += '<div class="column result-image">';
                     imageHTML += '<img src="' + path + '" alt="" class="image image-out">';
                     imageHTML += '</div>';
                     $('.results-wrapper').append(imageHTML);
