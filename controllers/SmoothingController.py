@@ -3,7 +3,6 @@ import numpy as np
 from skimage.exposure import rescale_intensity
 from view import View
 
-
 # primary method to be called imagesmoothing. For example: smoothing_obj = imageSmoothing(image, windowSize)
 class SmoothingController:
     image = None
