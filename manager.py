@@ -1,8 +1,8 @@
 from __future__ import unicode_literals, print_function, generators, division
 
 import shelve
-
-from app.model import Message
+from model import  Message
+#from app.model import Message
 
 __author__ = 'DIPSTER'
 
