@@ -23,8 +23,6 @@ class Router:
 
     def resolve(self, request_method, url):
         url = url.strip('/')
-        print(url)
-        print(self._routes)
         if url in self._routes[request_method]:
             controller, method = self._routes[request_method][url].split('@')
             controller = eval(controller)
