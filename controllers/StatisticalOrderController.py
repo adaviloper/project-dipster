@@ -8,27 +8,27 @@ from view import View
 class StatisticalOrderController:
     def filter(self, params):
         image_path = 'controllers/assets/images/' + params['image']
-        windowsize=params['windowSize']
-        windowsize=int(windowsize[-1])
-        filtertype=params['statisticalFilter']
+        windowsize = params['windowSize']
+        windowsize = int(windowsize[-1])
+        filtertype = params['statisticalFilter']
         print(windowsize)
         print(filtertype)
         input_image = cv2.imread(image_path, 0)
-        a=StatisticalOrderController()
-        #add noise
-        out_img1=a.add_saltandpepper_noise(input_image,7)
-        image_output1_path = 'controllers/assets/images/out/testimg1_out.png'
-        #filter
-        if filtertype=='mean':
+        a = StatisticalOrderController()
+        # add noise
+        out_img1 = a.add_saltandpepper_noise(input_image, 7)
+        image_output1_path = 'controllers/assets/images/out/1_' + params['image']
+        # filter
+        if filtertype == 'mean':
             out_img2 = a.mean_filtering(out_img1, windowsize)
-        elif filtertype=='median':
-            out_img2 = a.median_filtering(out_img1,windowsize)
-        #elif filtertype=='adaptive':
-        image_output2_path = 'controllers/assets/images/out/testimg2_out.png'
+        elif filtertype == 'median':
+            out_img2 = a.median_filtering(out_img1, windowsize)
+        # elif filtertype=='adaptive':
+        image_output2_path = 'controllers/assets/images/out/2_' + params['image']
         cv2.imwrite(image_output1_path, out_img1)
         cv2.imwrite(image_output2_path, out_img2)
         view = View()
-        output = view.render(message=[image_output1_path])
+        output = view.render(message = [image_output1_path, image_output2_path])
 
         return '200 okay', output
 
