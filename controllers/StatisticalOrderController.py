@@ -3,32 +3,32 @@ import numpy as np
 import math
 from skimage.exposure import rescale_intensity
 from view import View
+
+
 class StatisticalOrderController:
-
-    def filter(self,params):
-
+    def filter(self, params):
         image_path = 'controllers/assets/images/' + params['image']
-        windowsize=params['windowSize']
-        windowsize=int(windowsize[-1])
-        filtertype=params['statisticalFilter']
+        windowsize = params['windowSize']
+        windowsize = int(windowsize[-1])
+        filtertype = params['statisticalFilter']
         print(windowsize)
         
         input_image = cv2.imread(image_path, 0)
-        a=StatisticalOrderController()
-        #add noise
-        out_img1=a.add_saltandpepper_noise(input_image,7)
-        image_output1_path = 'controllers/assets/images/out/testimg1_out.png'
-        #filter
-        if filtertype=='mean':
+        a = StatisticalOrderController()
+        # add noise
+        out_img1 = a.add_saltandpepper_noise(input_image, 7)
+        image_output1_path = 'controllers/assets/images/out/1_' + params['image']
+        # filter
+        if filtertype == 'mean':
             out_img2 = a.mean_filtering(out_img1, windowsize)
-        elif filtertype=='median':
-            out_img2 = a.median_filtering(out_img1,windowsize)
-        #elif filtertype=='adaptive':
-        image_output2_path = 'controllers/assets/images/out/testimg2_out.png'
+        elif filtertype == 'median':
+            out_img2 = a.median_filtering(out_img1, windowsize)
+        # elif filtertype=='adaptive':
+        image_output2_path = 'controllers/assets/images/out/2_' + params['image']
         cv2.imwrite(image_output1_path, out_img1)
         cv2.imwrite(image_output2_path, out_img2)
         view = View()
-        output = view.render(message=[image_output1_path])
+        output = view.render(message = [image_output1_path, image_output2_path])
 
         return '200 okay', output
 
@@ -108,7 +108,8 @@ class StatisticalOrderController:
         ssim = SS * LL * CC
 
         return ssim
-    def create_testimg(self,n):
+
+    def create_testimg(self, n):
         # this is used to create img for testing with a size n*n
         img = np.zeros((n, n))
         for i in range(0, n):
@@ -126,8 +127,8 @@ class StatisticalOrderController:
         img = img.astype(np.uint8)
         return img
 
-    def add_gaussian_noise(self,img, sigma):
-        new_img=img.copy()
+    def add_gaussian_noise(self, img, sigma):
+        new_img = img.copy()
         for i in range(0, np.shape(img)[0]):
             for j in range(0, np.shape(img)[1]):
                 new_img[i, j] = np.random.normal(img[i, j], sigma)
@@ -136,8 +137,8 @@ class StatisticalOrderController:
         new_img = new_img.astype(np.uint8)
         return new_img
 
-    def add_saltandpepper_noise(self,img, p):
-        new_img=img.copy()
+    def add_saltandpepper_noise(self, img, p):
+        new_img = img.copy()
         for i in range(0, np.shape(img)[0]):
             for j in range(0, np.shape(img)[1]):
                 t1 = np.random.uniform(0, 10)

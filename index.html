@@ -28,14 +28,14 @@
                                 <span class="select is-fullwidth">
                                     <label>
                                         <select id="operation" name="operation" class="param">
-                                            <option selected="selected" value="filter">Correlation</option>
+                                            <option value="filter">Correlation</option>
                                             <option value="smoothing">Image smoothing</option>
                                             <optgroup label="Sharpening">
                                                 <option value="laplacian">Laplacian</option>
                                                 <option value="unsharp">Unsharp mask and high boost</option>
                                                 <option value="first-order-derivatives">First order derivatives</option>
                                             </optgroup>
-                                            <option value="statistical-order-filter">Statistical Order Filter</option>
+                                            <option selected="selected" value="statistical-order-filtering">Statistical Order Filter</option>
                                         </select>
                                     </label>
                                 </span>
@@ -48,7 +48,7 @@
                                             <option selected="selected" value="dog.png">Dog</option>
                                             <option value="turkey.png">Turkey</option>
                                             <option value="testimg.png">testimg</option>
-                                            <option value="image_4">image4</option>
+                                            <option value="salt-and-pepper-dog.png">Salty Dog</option>
                                             <option value="image_5">image5</option>
                                         </select>
                                     </label>
@@ -107,7 +107,7 @@
                                         <p>SSIM</p>
                                         <p class="control">
                                             <!-- FLOAT -->
-                                            <input id="ssim" type="text" class="input" placeholder="SSIM">
+                                            <input id="ssim" type="text" class="input" name="ssim" placeholder="SSIM">
                                         </p>
                                     </div>
                                 </div>
