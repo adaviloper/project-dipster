@@ -20,7 +20,7 @@ class StatisticalOrderController:
         cv2.imwrite(image_output1_path, out_img1)
         cv2.imwrite(image_output2_path, out_img2)
         view = View()
-        output = view.render(message=[image_output1_path,image_output2_path])
+        output = view.render(message=[image_output1_path])
         return '200 okay', output
 
     def img_padding(self, img, size, num):
