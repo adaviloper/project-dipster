@@ -21,6 +21,7 @@ class Form {
         let statisticalFilter = document.getElementById('statistical-filter').value || 0;
         let smoothingFilter = document.getElementById('smoothing-filter').value || 0;
         let order = document.getElementById('order').value || 2;
+        let ssim = document.getElementById('ssim').value || 0;
         this.filterParams = {
             image,
             operationType,
@@ -28,7 +29,8 @@ class Form {
             windowSize,
             statisticalFilter,
             smoothingFilter,
-            order
+            order,
+            ssim
         };
         $('.source-image').attr('src', '/controllers/assets/images/' + image);
     }
@@ -41,6 +43,12 @@ class Form {
         document.getElementById('windowSize').addEventListener('input', event => this.validateWindowSize(event));
         document.getElementById('statistical-filter').addEventListener('input', event => this.validateFilter(event));
         document.getElementById('smoothing-filter').addEventListener('input', event => this.validateFilter(event));
+        // document.getElementById('ssim').addEventListener('input', event => this.validateSSIM(event));
+        $('#ssim').keypress(function(event) {
+          if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+          }
+        });
         document.getElementById('submit').addEventListener('click', () => this.handleSubmit(event));
     }
 
@@ -96,17 +104,17 @@ class Form {
         $('.' + name + '-wrapper').css('display', state);
     }
 
-    static sanitize(input) {
+    static sanitizeInt(input) {
         return input.replace(/\D+/gi, '');
     }
 
     validateCutoff(event) {
-        this.filterParams.cutoff = Form.sanitize(event.target.value);
+        this.filterParams.cutoff = Form.sanitizeInt(event.target.value);
         this.cutoffElem.value = this.filterParams.cutoff;
     }
 
     validateOrder(event) {
-        this.filterParams.order = Form.sanitize(event.target.value);
+        this.filterParams.order = Form.sanitizeInt(event.target.value);
     }
 
     validateWindowSize(event) {
