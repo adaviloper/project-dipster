@@ -27,6 +27,7 @@ class Router:
             controller, method = self._routes[request_method][url].split('@')
             controller = eval(controller)
             callback = getattr(controller, method)
+
             if callback:
                 return callback
         elif Path(url).is_file():
