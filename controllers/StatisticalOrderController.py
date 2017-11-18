@@ -12,7 +12,7 @@ class StatisticalOrderController:
         windowsize=int(windowsize[-1])
         filtertype=params['statisticalFilter']
         print(windowsize)
-        print(filtertype)
+        
         input_image = cv2.imread(image_path, 0)
         a=StatisticalOrderController()
         #add noise
