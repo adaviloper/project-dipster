@@ -11,6 +11,7 @@ class Form {
         this.orderElem = document.getElementById('order');
         this.ssimElem = document.getElementById('ssim');
         this.setDefaultValues();
+        this.toggleOptions();
         this.setEventListeners();
     }
 
@@ -76,6 +77,10 @@ class Form {
      */
     updateOperationType(event) {
         this.filterParams.operationType = event.target.value;
+        this.toggleOptions();
+    }
+
+    toggleOptions() {
         if(this.filterParams.operationType === 'smoothing') {
             this.toggleable.forEach((name) => {
                 this.toggleDisplay(name, 'none');
@@ -102,13 +107,13 @@ class Form {
         }
     }
 
+    toggleDisplay(name, state) {
+        $('.' + name + '-wrapper').css('display', state);
+    }
+
     updateImage(event) {
         this.filterParams.image = event.target.value;
         $('.source-image').attr('src', '/controllers/assets/images/' + this.filterParams.image);
-    }
-
-    toggleDisplay(name, state) {
-        $('.' + name + '-wrapper').css('display', state);
     }
 
     static sanitizeInt(input) {
