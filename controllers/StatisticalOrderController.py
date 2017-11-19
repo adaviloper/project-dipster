@@ -10,7 +10,7 @@ class StatisticalOrderController:
         image_path = 'controllers/assets/images/' + params['image']
         windowsize = params['windowSize']
         windowsize = int(windowsize[-1])
-        filtertype = params['statisticalFilter']
+        filtertype = params['filter']
 
         input_image = cv2.imread(image_path, 0)
         a = StatisticalOrderController()
@@ -18,10 +18,13 @@ class StatisticalOrderController:
         out_img1 = a.add_saltandpepper_noise(input_image, 7)
         image_output1_path = 'controllers/assets/images/out/1_' + params['image']
         # filter
-        if filtertype == 'mean':
+        if 'filter' in params.key():
+            if filtertype == 'mean':
+                out_img2 = a.mean_filtering(out_img1, windowsize)
+            elif filtertype == 'median':
+                out_img2 = a.median_filtering(out_img1, windowsize)
+        else:
             out_img2 = a.mean_filtering(out_img1, windowsize)
-        elif filtertype == 'median':
-            out_img2 = a.median_filtering(out_img1, windowsize)
         # elif filtertype=='adaptive':
         image_output2_path = 'controllers/assets/images/out/2_' + params['image']
         cv2.imwrite(image_output1_path, out_img1)
