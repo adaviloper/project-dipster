@@ -5,7 +5,7 @@ from controllers import ConvolutionCorrelationController
 import cv2
 import numpy as np
 
-# Call laplacian function with an image as input
+# Call LaplacianInitial function for Laplacian operation
 
 class LaplacianController:
 

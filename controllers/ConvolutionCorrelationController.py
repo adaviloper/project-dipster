@@ -4,8 +4,8 @@ import cv2
 from scipy import signal
 from view import View
 
-# Call convolution For Convolution operation
-# Call correlation For Correlation operation
+# Call ConvolutionInitial For Convolution operation
+# Call CorrelationInitial For Correlation operation
 
 class ConvolutionCorrelationController:
 
