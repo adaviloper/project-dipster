@@ -13,7 +13,7 @@ router = Router()
 # List all routes here
 router.get('/', 'ConvolutionCorrelationController@index')
 router.get('/sharpen', 'SharpeningController@sharpen')
-router.get('/filter', 'FilteringController@filtering')
+router.get('/correlation', 'ConvolutionCorrelationController@CorrelationInitial')
 router.get('/smoothing', 'SmoothingController@smoothing')
 router.get('/statistical-order-filtering', 'StatisticalOrderController@filter')
 router.get('/unsharp', 'UnsharpMaskingAndHighBoostingController@unsharpMasking')
