@@ -1,24 +1,17 @@
 import cv2
 import numpy as np
-from skimage.exposure import rescale_intensity
-from view import View
 import sys
-fc = sys.path.append('controllers/FilteringController')
-from controllers import FilteringController
 
 class UnsharpMaskingNHighBoostingController:
-    image = None
 
+    def get_gaussian_low_pass_filter(self, params):
 
-    def get_gaussian_low_pass_filter(self, shape):
+        image_path = 'controllers/assets/images/' + params['image']
+        input_image = cv2.imread(image_path, 0)
+        gaussian = cv2.GaussianBlur(input_image, params['windowSize'], 10.0)
+        unsharp_image = cv2.addWeighted(input_image, 1.5, gaussian, -0.5, 0, input_image)
 
-        (rows, cols) = shape
-        output = np.zeros(shape)
-        for row in range(rows):
-            for col in range(cols):
-                distance = self.get_distance(col, cols, row, rows)
-                output[row, col] = (pow(np.e, -(distance**2 / (2 * self.cutoff ** 2)))).real
-        return output
+        return unsharp_image
 
     def unsharpMasking(self, image, params):
 
@@ -27,4 +20,9 @@ class UnsharpMaskingNHighBoostingController:
         input_image = cv2.imread(image_path, 0)
 
         smoothImg = self.get_gaussian_low_pass_filter(input_image)
-        return 0
+
+        mask = np.subtract(input_image, smoothImg)
+
+        result = input_image + 1 * mask
+        # Should return [input_image, smoothImg, result]
+        return result
