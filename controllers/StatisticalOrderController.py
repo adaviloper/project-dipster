@@ -26,8 +26,10 @@ class StatisticalOrderController:
         image_output2_path = 'controllers/assets/images/out/2_' + params['image']
         cv2.imwrite(image_output1_path, out_img1)
         cv2.imwrite(image_output2_path, out_img2)
+        #str=image_output2_path+'?ssim=0.8'
+        print(str)
         view = View()
-        output = view.render(message = [ image_output2_path])
+        output = view.render(message = [ image_output1_path ,image_output2_path])
 
         return '200 okay', output
 
