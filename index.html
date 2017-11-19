@@ -29,13 +29,13 @@
                                     <label>
                                         <select id="operation" name="operation" class="param">
                                             <option value="filter">Correlation</option>
-                                            <option value="smoothing">Image smoothing</option>
+                                            <option selected="selected" value="smoothing">Image smoothing</option>
                                             <optgroup label="Sharpening">
                                                 <option value="laplacian">Laplacian</option>
                                                 <option value="unsharp">Unsharp mask and high boost</option>
                                                 <option value="first-order-derivatives">First order derivatives</option>
                                             </optgroup>
-                                            <option selected="selected" value="statistical-order-filtering">Statistical Order Filter</option>
+                                            <option value="statistical-order-filtering">Statistical Order Filter</option>
                                         </select>
                                     </label>
                                 </span>
@@ -49,7 +49,7 @@
                                             <option value="turkey.png">Turkey</option>
                                             <option value="testimg.png">testimg</option>
                                             <option value="salt-and-pepper-dog.png">Salty Dog</option>
-                                            <option value="image_5">image5</option>
+                                            <option value="7x7dog.png">Blurry dog</option>
                                         </select>
                                     </label>
                                 </span>
@@ -64,6 +64,7 @@
                                                     <option selected="selected" value="3x3">3x3</option>
                                                     <option value="5x5">5x5</option>
                                                     <option value="7x7">7x7</option>
+                                                    <option value="9x9">9x9</option>
                                                 </select>
                                             </label>
                                         </span>
