@@ -17,6 +17,7 @@ router.get('/filter', 'FilteringController@filtering')
 router.get('/smoothing', 'SmoothingController@smoothing')
 router.get('/statistical-order-filtering', 'StatisticalOrderController@filter')
 router.get('/unsharp', 'UnsharpMaskingAndHighBoostingController@unsharpMasking')
+router.get('/laplacian', 'LaplacianController@filter')
 
 
 def application(environ, start_response):
