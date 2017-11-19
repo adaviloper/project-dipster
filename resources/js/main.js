@@ -151,18 +151,21 @@ class Form {
         this.updateParams();
         $('.result-image').remove();
         $('.results-wrapper').append('<div class="column result-image"><img src="/controllers/assets/images/loading-spinner.gif" /></div>');
-        console.log(this.filterParams);
         $.ajax({
             url: `http://localhost:8080/${this.filterParams.operationType}`,
             data: this.filterParams,
             success: function(data) {
+                console.log(data)
                 $('.result-image').remove();
+
                 let paths = data.slice(1).slice(0, -1);
-                paths = paths.split("\n\n");
+                console.log(paths)
+                paths = paths.split("\r\n\r\n");
+                console.log(data)
                 console.log(paths);
+                let paths = data.slice(1).slice(0, -1).replace("\r\n\r\n", "\n\n").split("\n\n");
                 paths.forEach((path) => {
                     let params = path.split('?')[1];
-                    console.log(params);
                     if(params) {
                         params = JSON.parse('{"' + decodeURI(params).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
                     }
