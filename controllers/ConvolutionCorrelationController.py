@@ -23,8 +23,8 @@ class ConvolutionCorrelationController:
                 org = np.insert(org, 0, 0, axis=0)
                 org = np.insert(org, org.shape[0], 0, axis=0)
 
-        x = (w + 1) / 2
-        y = (h + 1) / 2
+        x = (w - 1) / 2
+        y = (h - 1) / 2
 
         if w is not 1 and h is not 1:
             for i in range(int(x)):
@@ -84,8 +84,8 @@ class ConvolutionCorrelationController:
                 org = np.delete(org, 0, 0)
                 org = np.delete(org, org.shape[0] - 1, 0)
 
-        x = (w + 1) / 2 + 1
-        y = (h + 1) / 2 + 1
+        x = (w - 1) / 2 + 1
+        y = (h - 1) / 2 + 1
 
         if w is not 1 and h is not 1:
             for i in range(int(x)):
