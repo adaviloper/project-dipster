@@ -146,16 +146,26 @@ class Form {
 
     handleSubmit() {
         this.updateParams();
+        $('.results-wrapper').append('<div class="column result-image"><img src="/controllers/assets/images/loading-spinner.gif" /></div>');
         $.ajax({
             url: `http://localhost:8080/${this.filterParams.operationType}`,
             data: this.filterParams,
             success: function(data) {
                 let paths = data.slice(1).slice(0, -1).split("\n\n");
                 $('.result-image').remove();
+                console.log(paths);
                 paths.forEach((path) => {
+                    let params = path.split('?')[1];
+                    console.log(params);
+                    if(params) {
+                        params = JSON.parse('{"' + decodeURI(params).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+                    }
                     let imageHTML = '';
                     imageHTML += '<div class="column result-image">';
                     imageHTML += '<img src="' + path + '" alt="" class="image image-out">';
+                    for(let key in params) {
+                        imageHTML += "<strong>" + key + "</strong>: " + params[key] + "<br/>";
+                    }
                     imageHTML += '</div>';
                     $('.results-wrapper').append(imageHTML);
                 });
