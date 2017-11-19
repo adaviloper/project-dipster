@@ -4,9 +4,71 @@ import cv2
 from scipy import signal
 from view import View
 
-# Call convolution or correlation function with an image as input
+# Call convolution For Convolution operation
+# Call correlation For Correlation operation
 
 class ConvolutionCorrelationController:
+
+    def ConvolutionInitial(self, params):
+        image_path = 'controllers/assets/images/' + params['image']
+        image = cv2.imread(image_path, 0)
+        conv = ConvolutionCorrelationController()
+        output = conv.convolution(image)
+
+        image_output_path = 'controllers/assets/images/out/' + params['image']
+        cv2.imwrite(image_output_path, output)
+        view = View()
+        output = view.render(message=[image_output_path])
+        return '200 okay', output
+
+    def CorrelationInitial(self, params):
+        image_path = 'controllers/assets/images/' + params['image']
+        image = cv2.imread(image_path, 0)
+        conv = ConvolutionCorrelationController()
+        output = conv.correlation(image)
+
+        image_output_path = 'controllers/assets/images/out/' + params['image']
+        cv2.imwrite(image_output_path, output)
+        view = View()
+        output = view.render(message=[image_output_path])
+        return '200 okay', output
+
+    def convolution(self, image=None, mask=None):
+        # input: orginal image and mask
+        # output: image after convolution
+        if image is None:
+            image_path = 'controllers/assets/images/'
+            image = cv2.imread(image_path, 0)
+
+        if mask is None:
+            mask = np.array([[1, 2, 1],
+                      [2, 4, 2],
+                      [1, 2, 1]], dtype=float
+                     )/16
+
+        image = self.convolt(image, mask)
+        image = self.zero_cropping(image, mask)
+
+        #return image
+        return image.astype(np.uint8)
+
+    def correlation(self, image=None, mask=None):
+        # input: orginal image and mask
+        # output: image after correlation
+        if image is None:
+            image_path = 'controllers/assets/images/'
+            image = cv2.imread(image_path, 0)
+
+        if mask is None:
+            mask = np.array([[1, 2, 1],
+                      [2, 4, 2],
+                      [1, 2, 1]], dtype=float
+                     )/16
+
+        image = self.convolt(image, mask)
+        image = self.zero_cropping(image, mask)
+        #return image
+        return image.astype(np.uint8)
 
     def zero_padding(self,org, mask):
         w, h = mask.shape
@@ -99,35 +161,7 @@ class ConvolutionCorrelationController:
 
         return org
 
-    def convolution(self, image, mask=None):
-        # input: orginal image and mask
-        # output: image after convolution
-        if mask is None:
-            mask = np.array([[1, 2, 1],
-                      [2, 4, 2],
-                      [1, 2, 1]], dtype=float
-                     )/16
 
-        image = self.convolt(image, mask)
-        image = self.zero_cropping(image, mask)
-
-        return image
-        #return image.astype(np.uint8)
-
-    def correlation(self, image, mask=None):
-        # input: orginal image and mask
-        # output: image after correlation
-
-        if mask is None:
-            mask = np.array([[1, 2, 1],
-                      [2, 4, 2],
-                      [1, 2, 1]], dtype=float
-                     )/16
-
-        image = self.convolt(image, mask)
-        image = self.zero_cropping(image, mask)
-        return image
-        #return image.astype(np.uint8)
 
     def test(self):
 
