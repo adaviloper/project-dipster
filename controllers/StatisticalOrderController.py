@@ -10,7 +10,8 @@ class StatisticalOrderController:
         image_path = 'controllers/assets/images/' + params['image']
         windowsize = params['windowSize']
         windowsize = int(windowsize[-1])
-        filtertype = params['filter']
+        filtertype = params['statisticalFilter']
+        print(filtertype)
 
         input_image = cv2.imread(image_path, 0)
         a = StatisticalOrderController()
@@ -18,7 +19,7 @@ class StatisticalOrderController:
         out_img1 = a.add_saltandpepper_noise(input_image, 7)
         image_output1_path = 'controllers/assets/images/out/1_' + params['image']
         # filter
-        if 'filter' in params.key():
+        if 'statisticalFilter' in params.keys():
             if filtertype == 'mean':
                 out_img2 = a.mean_filtering(out_img1, windowsize)
             elif filtertype == 'median':
