@@ -1,14 +1,15 @@
 class Form {
     constructor() {
-        this.toggleable = ['windowSize', 'statistical-filter', 'smoothing-filter', 'cutoff', 'order'];
+        this.toggleable = ['window-size', 'statistical-filter', 'smoothing-filter', 'cutoff', 'order', 'ssim'];
         this.filterParams = {};
-        this.imageElem = $('#image');
-        this.operationTypeElem = $('#operation');
-        this.cutoffElem = $('#cutoff');
-        this.windowSizeElem = $('#windowSize');
-        this.statisticalFilterElem = $('#statistical-filter');
-        this.smoothingFilterElem = $('#smoothing-filter');
-        this.orderElem = $('#order');
+        this.imageElem = document.getElementById('image');
+        this.operationTypeElem = document.getElementById('operation');
+        this.cutoffElem = document.getElementById('cutoff');
+        this.windowSizeElem = document.getElementById('windowSize');
+        this.statisticalFilterElem = document.getElementById('statistical-filter');
+        this.smoothingFilterElem = document.getElementById('smoothing-filter');
+        this.orderElem = document.getElementById('order');
+        this.ssimElem = document.getElementById('ssim');
         this.setDefaultValues();
         this.setEventListeners();
     }
@@ -44,10 +45,11 @@ class Form {
         document.getElementById('statistical-filter').addEventListener('input', event => this.validateFilter(event));
         document.getElementById('smoothing-filter').addEventListener('input', event => this.validateFilter(event));
         // document.getElementById('ssim').addEventListener('input', event => this.validateSSIM(event));
-        $('#ssim').keypress(function(event) {
-          if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+        $('#ssim').keypress((event) => {
+          if ((event.which !== 46 || $('#ssim').val().indexOf('.') !== -1) && (event.which < 48 || event.which > 57)) {
             event.preventDefault();
           }
+          this.filterParams.ssim = $('#ssim').val();
         });
         document.getElementById('submit').addEventListener('click', () => this.handleSubmit(event));
     }
@@ -92,6 +94,10 @@ class Form {
             });
             this.toggleDisplay('statistical-filter', 'block');
             this.toggleDisplay('window-size', 'block');
+        } else if(this.filterParams.operationType === 'unsharp') {
+            this.toggleable.forEach((name) => {
+                this.toggleDisplay(name, 'none');
+            });
         }
     }
 
@@ -115,6 +121,7 @@ class Form {
 
     validateOrder(event) {
         this.filterParams.order = Form.sanitizeInt(event.target.value);
+        this.orderElem.value = this.filterParams.order;
     }
 
     validateWindowSize(event) {
@@ -125,16 +132,21 @@ class Form {
         this.filterParams.filter = event.target.value;
     }
 
+    updateParams() {
+        this.filterParams.ssim = this.ssimElem.value;
+        this.filterParams.cutoff = this.cutoffElem.value;
+        this.filterParams.order = this.orderElem.value;
+    }
+
     handleSubmit() {
+        this.updateParams();
         $.ajax({
             url: `http://localhost:8080/${this.filterParams.operationType}`,
             data: this.filterParams,
             success: function(data) {
                 let paths = data.slice(1).slice(0, -1).split("\n\n");
-                console.log(paths);
                 $('.result-image').remove();
                 paths.forEach((path) => {
-//                console.log(path);
                     let imageHTML = '';
                     imageHTML += '<div class="column result-image">';
                     imageHTML += '<img src="' + path + '" alt="" class="image image-out">';
