@@ -18,7 +18,7 @@ class StatisticalOrderController:
         # add noise
         if params['image']=='gaussian_noise.png':
             out_img1 = a.add_gaussian_noise(input_image, 40)
-        if params['image']=='saltandpepper_noise.png':
+        if params['image'] == 'saltandpepper_noise.png':
             out_img1 = a.add_saltandpepper_noise(input_image, 7)
         image_output1_path = 'controllers/assets/images/out/1_' + params['image']
         # filter
@@ -35,6 +35,12 @@ class StatisticalOrderController:
         cv2.imwrite(image_output2_path, out_img2)
         ssim=a.ssim(input_image,out_img2)
         str_ssim=str(ssim)
+        image_output2_path = 'controllers/assets/images/out/2_' + params['statisticalFilter'] + params['windowSize'] + \
+                             params['image']
+        cv2.imwrite(image_output1_path, out_img1)
+        cv2.imwrite(image_output2_path, out_img2)
+        ssim = a.ssim(input_image, out_img2)
+        str_ssim = str(ssim)
         print(type(ssim))
         print(ssim)
         print(type(str_ssim))
@@ -43,6 +49,10 @@ class StatisticalOrderController:
         # print(str)
         view = View()
         output = view.render(message = [image_output1_path,image_output2_path])
+        str1 = image_output2_path + '?ssim=0%3D8'
+        # print(str)
+        view = View()
+        output = view.render(message=[image_output1_path, image_output2_path])
 
         return '200 okay', output
 
