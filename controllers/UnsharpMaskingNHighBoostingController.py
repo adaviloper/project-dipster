@@ -9,6 +9,7 @@ from controllers import FilteringController
 class UnsharpMaskingNHighBoostingController:
     image = None
 
+
     def get_gaussian_low_pass_filter(self, shape):
 
         (rows, cols) = shape
