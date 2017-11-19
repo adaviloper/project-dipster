@@ -97,8 +97,6 @@ class Form {
             this.toggleable.forEach((name) => {
                 this.toggleDisplay(name, 'none');
             });
-            this.toggleDisplay('statistical-filter', 'block');
-            this.toggleDisplay('window-size', 'block');
         } else if(this.filterParams.operationType === 'unsharp') {
             this.toggleable.forEach((name) => {
                 this.toggleDisplay(name, 'none');

@@ -9,7 +9,9 @@ class UnsharpMaskingAndHighBoostingController:
     def get_gaussian_low_pass_filter(self, params):
         image_path = 'controllers/assets/images/' + params['image']
         input_image = cv2.imread(image_path, 0)
-        gaussian = cv2.GaussianBlur(input_image, params['windowSize'], 10.0)
+        window_size = int(params['windowSize'][0])
+        print("windowSIze:",window_size)
+        gaussian = cv2.GaussianBlur(input_image, (window_size, window_size), 10.0)
         unsharp_image = cv2.addWeighted(input_image, 1.5, gaussian, -0.5, 0, input_image)
 
         return unsharp_image
