@@ -19,9 +19,9 @@ class Form {
         let operationType = document.getElementById('operation').value;
         let image = document.getElementById('image').value;
         let cutoff = document.getElementById('cutoff').value || 0;
-        let windowSize = document.getElementById('windowSize').value || 0;
-        let statisticalFilter = document.getElementById('statistical-filter').value || 0;
-        let smoothingFilter = document.getElementById('smoothing-filter').value || 0;
+        let windowSize = document.getElementById('windowSize').value;
+        let statisticalFilter = document.getElementById('statistical-filter').value;
+        let smoothingFilter = document.getElementById('smoothing-filter').value;
         let order = document.getElementById('order').value || 2;
         let ssim = document.getElementById('ssim').value || 0;
         this.filterParams = {
@@ -43,8 +43,8 @@ class Form {
         document.getElementById('cutoff').addEventListener('input', event => this.validateCutoff(event));
         document.getElementById('order').addEventListener('input', event => this.validateOrder(event));
         document.getElementById('windowSize').addEventListener('input', event => this.validateWindowSize(event));
-        document.getElementById('statistical-filter').addEventListener('input', event => this.validateFilter(event));
-        document.getElementById('smoothing-filter').addEventListener('input', event => this.validateFilter(event));
+        document.getElementById('statistical-filter').addEventListener('input', event => this.validateStatisticalFilter(event));
+        document.getElementById('smoothing-filter').addEventListener('input', event => this.validateSmoothingFilter(event));
         // document.getElementById('ssim').addEventListener('input', event => this.validateSSIM(event));
         $('#ssim').keypress((event) => {
           if ((event.which !== 46 || $('#ssim').val().indexOf('.') !== -1) && (event.which < 48 || event.which > 57)) {
@@ -132,8 +132,12 @@ class Form {
         this.filterParams.windowSize = event.target.value;
     }
 
-    validateFilter(event) {
-        this.filterParams.filter = event.target.value;
+    validateStatisticalFilter(event) {
+        this.filterParams.statisticalFilter = event.target.value;
+    }
+
+    validateSmoothingFilter(event) {
+        this.filterParams.smoothingFilter = event.target.value;
     }
 
     updateParams() {
@@ -146,6 +150,7 @@ class Form {
         this.updateParams();
         $('.result-image').remove();
         $('.results-wrapper').append('<div class="column result-image"><img src="/controllers/assets/images/loading-spinner.gif" /></div>');
+        console.log(this.filterParams);
         $.ajax({
             url: `http://localhost:8080/${this.filterParams.operationType}`,
             data: this.filterParams,
