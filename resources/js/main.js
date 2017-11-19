@@ -158,11 +158,13 @@ class Form {
                 console.log(data)
                 $('.result-image').remove();
 
+
                 let paths = data.slice(1).slice(0, -1);
                 console.log(paths)
                 paths = paths.split("\r\n\r\n");
                 console.log(data)
                 console.log(paths);
+
                 let paths = data.slice(1).slice(0, -1).replace("\r\n\r\n", "\n\n").split("\n\n");
                 paths.forEach((path) => {
                     let params = path.split('?')[1];
