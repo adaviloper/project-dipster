@@ -93,6 +93,7 @@ class Form {
             });
             this.toggleDisplay('statistical-filter', 'block');
             this.toggleDisplay('window-size', 'block');
+            this.toggleDisplay('ssim', 'block');
         } else if(this.filterParams.operationType === 'laplacian') {
             this.toggleable.forEach((name) => {
                 this.toggleDisplay(name, 'none');
@@ -156,7 +157,8 @@ class Form {
             data: this.filterParams,
             success: function(data) {
                 $('.result-image').remove();
-                let paths = data.slice(1).slice(0, -1).split("\n\n");
+                let paths = data.slice(1).slice(0, -1);
+                paths = paths.split("\n\n");
                 console.log(paths);
                 paths.forEach((path) => {
                     let params = path.split('?')[1];
