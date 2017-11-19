@@ -1,7 +1,6 @@
 # For this part of the assignment, You can use inbuilt functions to compute the fourier transform
 # You are welcome to use fft that are available in numpy and opencv
 import cv2
-
 import numpy as np
 from pathlib import Path
 

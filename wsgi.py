@@ -16,6 +16,7 @@ router.get('/sharpen', 'SharpeningController@sharpen')
 router.get('/filter', 'FilteringController@filtering')
 router.get('/smoothing', 'SmoothingController@smoothing')
 router.get('/statistical-order-filtering', 'StatisticalOrderController@filter')
+router.get('/unsharp', 'UnsharpMaskingAndHighBoostingController@unsharpMasking')
 
 
 def application(environ, start_response):
