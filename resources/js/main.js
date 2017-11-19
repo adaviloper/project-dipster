@@ -98,6 +98,7 @@ class Form {
             this.toggleable.forEach((name) => {
                 this.toggleDisplay(name, 'none');
             });
+            this.toggleDisplay('window-size', 'block');
         }
     }
 
