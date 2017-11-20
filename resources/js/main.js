@@ -10,7 +10,6 @@ class Form {
         this.statisticalFilterElem = document.getElementById('statistical-filter');
         this.smoothingFilterElem = document.getElementById('smoothing-filter');
         this.orderElem = document.getElementById('order');
-        this.ssimElem = document.getElementById('ssim');
         this.setDefaultValues();
         this.toggleOptions();
         this.setEventListeners();
@@ -25,7 +24,6 @@ class Form {
         let statisticalFilter = document.getElementById('statistical-filter').value;
         let smoothingFilter = document.getElementById('smoothing-filter').value;
         let order = document.getElementById('order').value || 2;
-        let ssim = document.getElementById('ssim').value || 0;
         this.filterParams = {
             image,
             operationType,
@@ -34,8 +32,7 @@ class Form {
             windowSize,
             statisticalFilter,
             smoothingFilter,
-            order,
-            ssim
+            order
         };
         $('.source-image').attr('src', '/controllers/assets/images/' + image);
     }
@@ -50,12 +47,12 @@ class Form {
         document.getElementById('statistical-filter').addEventListener('input', event => this.validateStatisticalFilter(event));
         document.getElementById('smoothing-filter').addEventListener('input', event => this.validateSmoothingFilter(event));
         // document.getElementById('ssim').addEventListener('input', event => this.validateSSIM(event));
-        $('#ssim').keypress((event) => {
-          if ((event.which !== 46 || $('#ssim').val().indexOf('.') !== -1) && (event.which < 48 || event.which > 57)) {
-            event.preventDefault();
-          }
-          this.filterParams.ssim = $('#ssim').val();
-        });
+        // $('#ssim').keypress((event) => {
+        //   if ((event.which !== 46 || $('#ssim').val().indexOf('.') !== -1) && (event.which < 48 || event.which > 57)) {
+        //     event.preventDefault();
+        //   }
+        //   this.filterParams.ssim = $('#ssim').val();
+        // });
         document.getElementById('submit').addEventListener('click', () => this.handleSubmit(event));
     }
 
@@ -94,7 +91,6 @@ class Form {
         } else if(this.filterParams.operationType === 'statistical-order-filtering') {
             this.toggleDisplay('statistical-filter', 'block');
             this.toggleDisplay('window-size', 'block');
-            this.toggleDisplay('ssim', 'block');
         } else if(this.filterParams.operationType === 'laplacian') {
         } else if(this.filterParams.operationType === 'unsharp') {
             this.toggleDisplay('window-size', 'block');
@@ -145,7 +141,6 @@ class Form {
     }
 
     updateParams() {
-        this.filterParams.ssim = this.ssimElem.value;
         this.filterParams.cutoff = this.cutoffElem.value;
         this.filterParams.order = this.orderElem.value;
     }
