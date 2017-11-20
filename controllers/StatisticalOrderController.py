@@ -36,9 +36,7 @@ class StatisticalOrderController:
         image_output2_path = 'controllers/assets/images/out/2_' +  params['statisticalFilter']+params['windowSize']+params['image']
         cv2.imwrite(image_output1_path, out_img1)
         cv2.imwrite(image_output2_path, out_img2)
-        ssim=a.ssim(input_image,out_img2)
-        str_ssim=str(ssim)
-
+      
         ssim = a.ssim(input_image, out_img2)
         str_ssim = str(ssim)
         print(type(ssim))
