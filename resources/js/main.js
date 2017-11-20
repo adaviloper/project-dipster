@@ -19,7 +19,7 @@ class Form {
     setDefaultValues() {
         let operationType = document.getElementById('operation').value;
         let image = document.getElementById('image').value;
-        let kSize = document.getElementById('kSize').value || 0;
+        let kSize = document.getElementById('kSize').value;
         let cutoff = document.getElementById('cutoff').value || 0;
         let windowSize = document.getElementById('windowSize').value;
         let statisticalFilter = document.getElementById('statistical-filter').value;
@@ -118,7 +118,7 @@ class Form {
     }
 
     validateKSize(event) {
-        this.filterParams.kSize = Form.sanitizeInt(event.target.value);
+        this.filterParams.kSize = event.target.value;
         this.kSizeElem.value = this.filterParams.kSize;
     }
 

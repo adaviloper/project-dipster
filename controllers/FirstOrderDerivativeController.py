@@ -3,7 +3,7 @@ import cv2
 from view import View
 
 
-class FirstOrderDerivateController:
+class FirstOrderDerivativeController:
     def filter(self, params):
         image_path = 'controllers/assets/images/' + params['image']
 
