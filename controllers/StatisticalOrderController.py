@@ -38,15 +38,10 @@ class StatisticalOrderController:
         cv2.imwrite(image_output2_path, out_img2)
       
         ssim = a.ssim(input_image, out_img2)
-        str_ssim = str(ssim)
-        print(type(ssim))
-        print(ssim)
-        print(type(str_ssim))
-        print(str_ssim)
-        str1 = image_output2_path + '?ssim=0%3D8'
+        output_str2 = image_output2_path + '?ssim=' + str(ssim)
         # print(str)
         view = View()
-        output = view.render(message=[image_output1_path, image_output2_path])
+        output = view.render(message=[image_output1_path, output_str2])
 
         return '200 okay', output
 
