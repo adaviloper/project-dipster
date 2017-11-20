@@ -27,6 +27,8 @@ class StatisticalOrderController:
                 out_img2 = a.mean_filtering(out_img1, windowsize)
             elif filtertype == 'median':
                 out_img2 = a.median_filtering(out_img1, windowsize)
+            elif filtertype == 'adaptive':
+                out_img2 = a.adaptive_filter(out_img1, windowsize)
         else:
             out_img2 = a.mean_filtering(out_img1, windowsize)
         # elif filtertype=='adaptive':
@@ -108,7 +110,28 @@ class StatisticalOrderController:
                 new_img[i - size, j - size] = np.mean(l)
         new_img = new_img.astype(np.uint8)
         return new_img
+    def adaptive_filter(self,img,window_size):
+        x, y = np.shape(img)
+        new_img = np.zeros((x, y))
+        ns=[]
+        for i in range(0,50):
+            for j in range(0,100):
+                ns.append(img[i,j])
+        vn=np.var(ns)
+        size = int((window_size - 1) / 2)
+        padded_img = self.img_padding(img, size, 0)
+        for i in range(size, x + size):
+            for j in range(size, y + size):
+                l = []
+                for m in range(-1 * size, size + 1):
+                    for n in range(-1 * size, size + 1):
+                        l.append(padded_img[i + m, j + n])
+                vl=np.var(l)+1
 
+                ml=np.mean(l)
+                new_img[i - size, j - size] = padded_img[i,j] - (vn/vl)*(padded_img[i,j]-ml)
+        new_img = new_img.astype(np.uint8)
+        return new_img
     def ssim(self, img1, img2):
         l1 = []
         l2 = []
