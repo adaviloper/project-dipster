@@ -18,6 +18,7 @@ router.get('/smoothing', 'SmoothingController@smoothing')
 router.get('/statistical-order-filtering', 'StatisticalOrderController@filter')
 router.get('/unsharp', 'UnsharpMaskingAndHighBoostingController@unsharpMasking')
 router.get('/laplacian', 'LaplacianController@filter')
+router.get('/first-order-derivatives', 'FirstOrderDerivativeController@filter')
 
 
 def application(environ, start_response):
