@@ -4,7 +4,6 @@ class Form {
         this.filterParams = {};
         this.imageElem = document.getElementById('image');
         this.operationTypeElem = document.getElementById('operation');
-        this.kSizeElem = document.getElementById('kSize');
         this.cutoffElem = document.getElementById('cutoff');
         this.windowSizeElem = document.getElementById('windowSize');
         this.statisticalFilterElem = document.getElementById('statistical-filter');
@@ -18,7 +17,6 @@ class Form {
     setDefaultValues() {
         let operationType = document.getElementById('operation').value;
         let image = document.getElementById('image').value;
-        let kSize = document.getElementById('kSize').value;
         let cutoff = document.getElementById('cutoff').value || 0;
         let windowSize = document.getElementById('windowSize').value;
         let statisticalFilter = document.getElementById('statistical-filter').value;
