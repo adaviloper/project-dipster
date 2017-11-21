@@ -161,7 +161,7 @@ class Form {
                     if(params) {
                         path=path.split('?')[0];
                         console.log(path)
-                        params = JSON.parse('{"' + decodeURI(params).replace(/"/g, '\\'").replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+                        params = JSON.parse('{"' + decodeURI(params).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 
                     }
                     let imageHTML = '';
