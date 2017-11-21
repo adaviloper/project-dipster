@@ -1,6 +1,6 @@
 class Form {
     constructor() {
-        this.toggleable = ['window-size', 'statistical-filter', 'smoothing-filter', 'k-size', 'cutoff', 'order', 'ssim'];
+        this.toggleable = ['window-size', 'statistical-filter', 'smoothing-filter', 'cutoff', 'order', 'ssim'];
         this.filterParams = {};
         this.imageElem = document.getElementById('image');
         this.operationTypeElem = document.getElementById('operation');
@@ -27,7 +27,6 @@ class Form {
         this.filterParams = {
             image,
             operationType,
-            kSize,
             cutoff,
             windowSize,
             statisticalFilter,
@@ -40,7 +39,6 @@ class Form {
     setEventListeners() {
         document.getElementById('operation').addEventListener('input', event => this.updateOperationType(event));
         document.getElementById('image').addEventListener('input', event => this.updateImage(event));
-        document.getElementById('kSize').addEventListener('input', event => this.validateKSize(event));
         document.getElementById('cutoff').addEventListener('input', event => this.validateCutoff(event));
         document.getElementById('order').addEventListener('input', event => this.validateOrder(event));
         document.getElementById('windowSize').addEventListener('input', event => this.validateWindowSize(event));
@@ -96,7 +94,6 @@ class Form {
             this.toggleDisplay('window-size', 'block');
         } else if(this.filterParams.operationType === 'first-order-derivatives') {
             this.toggleDisplay('window-size', 'block');
-            this.toggleDisplay('k-size', 'block');
         }
     }
 
@@ -111,11 +108,6 @@ class Form {
 
     static sanitizeInt(input) {
         return input.replace(/\D+/gi, '');
-    }
-
-    validateKSize(event) {
-        this.filterParams.kSize = event.target.value;
-        this.kSizeElem.value = this.filterParams.kSize;
     }
 
     validateCutoff(event) {
