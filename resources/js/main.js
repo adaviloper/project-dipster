@@ -160,7 +160,7 @@ class Form {
                     let params = path.split('?')[1];
                     if(params) {
                         path=path.split('?')[0];
-                        console.log(path)
+                        #console.log(path)
                         params = JSON.parse('{"' + decodeURI(params).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 
                     }
