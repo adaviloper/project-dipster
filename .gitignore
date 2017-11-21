@@ -1,4 +1,4 @@
 .idea/
 __pycache__/
-controllers/assets/images/out/
+controllers/assets/images/out/*
 .DS_Store
