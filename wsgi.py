@@ -11,13 +11,13 @@ STATIC_ROOT = 'data'
 # Instantiate the router
 router = Router()
 # List all routes here
-router.get('/', 'ConvolutionCorrelationController@index')
+router.get('/convolution', 'ConvolutionCorrelationController@ConvolutionInitial')
 router.get('/sharpen', 'SharpeningController@sharpen')
 router.get('/correlation', 'ConvolutionCorrelationController@CorrelationInitial')
 router.get('/smoothing', 'SmoothingController@smoothing')
 router.get('/statistical-order-filtering', 'StatisticalOrderController@filter')
 router.get('/unsharp', 'UnsharpMaskingAndHighBoostingController@unsharpMasking')
-router.get('/laplacian', 'LaplacianController@filter')
+router.get('/laplacian', 'LaplacianController@LaplacianInitial')
 router.get('/first-order-derivatives', 'FirstOrderDerivativeController@filter')
 
 
