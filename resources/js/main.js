@@ -159,7 +159,8 @@ class Form {
                 paths.forEach((path) => {
                     let params = path.split('?')[1];
                     if(params) {
-                        params = JSON.parse('{"' + decodeURI(params).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+                       params = JSON.parse('{"' + decodeURI(params).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+
 
                     }
                     let imageHTML = '';
