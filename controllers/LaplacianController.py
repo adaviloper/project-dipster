@@ -12,8 +12,8 @@ class LaplacianController:
     def LaplacianInitial(self, params):
         image_path = 'controllers/assets/images/' + params['image']
         image = cv2.imread(image_path, 0)
-        lap = LaplacianController()
-        output = lap.laplacian(image)
+
+        output = self.laplacian(image)
 
         image_output_path = 'controllers/assets/images/out/' + params['image']
         cv2.imwrite(image_output_path, output)
@@ -26,22 +26,22 @@ class LaplacianController:
             image_path = 'controllers/assets/images/'
             img = cv2.imread(image_path, 0)
         org = np.copy(img)
-        print(org.shape)
 
         if mask is None:
             mask = np.array([[0, -1, 0], [-1, 4, -1], [0, -1, 0]])
-        img = self.convolution(img, mask)
+        conv = ConvolutionCorrelationController.ConvolutionCorrelationController()
+        img = conv.convolution(img, mask)
         result = np.add(org, img)
         result = self.post_process_image(result)
 
         return result
 
-    def convolution(self, img, mask):
-        conv = ConvolutionCorrelationController.ConvolutionCorrelationController()
-        img = conv.convolt(img, mask)
-        img = conv.zero_cropping(img, mask)
-
-        return img
+    # def convolution(self, img, mask):
+    #     conv = ConvolutionCorrelationController.ConvolutionCorrelationController()
+    #     img = conv.convolt(img, mask)
+    #     img = conv.zero_cropping(img, mask)
+    #
+    #     return img
 
     def post_process_image(self, image):
 

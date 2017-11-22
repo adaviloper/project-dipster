@@ -12,8 +12,8 @@ class ConvolutionCorrelationController:
     def ConvolutionInitial(self, params):
         image_path = 'controllers/assets/images/' + params['image']
         image = cv2.imread(image_path, 0)
-        conv = ConvolutionCorrelationController()
-        output = conv.convolution(image)
+        output = self.convolution(image)
+
 
         image_output_path = 'controllers/assets/images/out/' + params['image']
         cv2.imwrite(image_output_path, output)
@@ -24,8 +24,7 @@ class ConvolutionCorrelationController:
     def CorrelationInitial(self, params):
         image_path = 'controllers/assets/images/' + params['image']
         image = cv2.imread(image_path, 0)
-        conv = ConvolutionCorrelationController()
-        output = conv.correlation(image)
+        output = self.correlation(image)
 
         image_output_path = 'controllers/assets/images/out/' + params['image']
         cv2.imwrite(image_output_path, output)
@@ -63,17 +62,31 @@ class ConvolutionCorrelationController:
 
         return image.astype(np.uint8)
 
-    def zero_padding(self,org, mask):
+    def zero_padding(self, org, size):
+        w, h = org.shape
+        print("zero padding")
+        print(w, h)
+        print(size)
+        m = int(w + 2 * size)
+        n = int(h + 2 * size)
+        temp = np.zeros((m, n), dtype=int)
+
+        for i in range(size, w + size):
+            for j in range(size, h + size):
+                temp[i, j] = org[i - size, j - size]
+
+        print('after padding')
+        print(temp.shape)
+        return temp
+
+    def mask_rotate(self, mask):
         w, h = mask.shape
-        size = (max(w, h) - 1) / 2
+        temp = np.zeros([w, h])
+        for i in range(w):
+            for j in range(h):
+                temp[i, j] = mask[w-i-1, h-j-1]
 
-        for i in range(int(size)):
-            org = np.insert(org, 0, 0, axis=1)
-            org = np.insert(org, org.shape[1], 0, axis=1)
-            org = np.insert(org, 0, 0, axis=0)
-            org = np.insert(org, org.shape[0], 0, axis=0)
-
-        return org
+        return temp
 
     def convolt(self, img, mask):
 
@@ -93,7 +106,8 @@ class ConvolutionCorrelationController:
                 mask = np.insert(mask, 0, 0, axis=1)
                 mask = np.insert(mask, mask.shape[1], 0, axis=1)
         mw, mh = mask.shape
-        mask = np.rot90(mask, 2)
+        #mask = np.rot90(mask, 2)
+        mask = self.mask_rotate(mask)
 
         offset = int((len(mask) - 1) / 2)
 
@@ -135,18 +149,23 @@ class ConvolutionCorrelationController:
 
         return temp
 
-    def zero_cropping(self, org, mask):
-        w, h = mask.shape
-        size = (max(w, h) - 1) / 2
-        print(size)
-        for i in range(int(size)):
-            org = np.delete(org, 0, 1)
-            org = np.delete(org, org.shape[1] - 1, 1)
+    def zero_cropping(self, org, size):
+        w, h = org.shape
 
-            org = np.delete(org, 0, 0)
-            org = np.delete(org, org.shape[0] - 1, 0)
+        print('org cropping')
+        print(w, h)
+        m = w - 2 * size
+        n = h - 2 * size
+        print(m, n)
 
-        return org
+        temp = np.zeros([m, n], dtype=float)
+        print(temp.shape)
+
+        for i in range(0, m):
+            for j in range(0, n):
+                temp[i, j] = org[i + size, j + size]
+        print("after cropping")
+        return temp
 
 
 
