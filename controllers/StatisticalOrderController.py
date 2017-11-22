@@ -3,7 +3,7 @@ import numpy as np
 import math
 from skimage.exposure import rescale_intensity
 from view import View
-
+from controllers.ConvolutionCorrelationController import ConvolutionCorrelationController as conv
 
 class StatisticalOrderController:
     def filter(self, params):
@@ -95,6 +95,7 @@ class StatisticalOrderController:
                     for n in range(-1 * size, size + 1):
                         l.append(padded_img[i + m, j + n])
                 new_img[i - size, j - size] = np.mean(l)
+
         new_img = new_img.astype(np.uint8)
         return new_img
     def adaptive_filter(self,img,window_size):
@@ -122,6 +123,8 @@ class StatisticalOrderController:
     def ssim(self, img1, img2):
         l1 = []
         l2 = []
+        print(img1.shape)
+        print(img2.shape)
         for i in range(0, np.shape(img1)[0]):
             for j in range(0, np.shape(img1)[1]):
                 l1.append(img1[i, j])

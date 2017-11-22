@@ -1,7 +1,7 @@
 from __future__ import unicode_literals, print_function, generators, division
 
 from view import View
-from controllers import ConvolutionCorrelationController
+from controllers.ConvolutionCorrelationController import ConvolutionCorrelationController as conv
 import cv2
 import numpy as np
 
@@ -12,8 +12,8 @@ class LaplacianController:
     def LaplacianInitial(self, params):
         image_path = 'controllers/assets/images/' + params['image']
         image = cv2.imread(image_path, 0)
-
-        output = self.laplacian(image)
+        lap = LaplacianController()
+        output = lap.laplacian(image)
 
         image_output_path = 'controllers/assets/images/out/' + params['image']
         cv2.imwrite(image_output_path, output)
@@ -21,27 +21,31 @@ class LaplacianController:
         output = view.render(message=[image_output_path])
         return '200 okay', output
 
-    def laplacian(self, img=None, mask=None):
+    def laplacian(self, img, mask=None):
+        print("img shape = ", img.shape)
         if img is None:
             image_path = 'controllers/assets/images/'
             img = cv2.imread(image_path, 0)
         org = np.copy(img)
 
         if mask is None:
-            mask = np.array([[0, -1, 0], [-1, 4, -1], [0, -1, 0]])
-        conv = ConvolutionCorrelationController.ConvolutionCorrelationController()
-        img = conv.convolution(img, mask)
-        result = np.add(org, img)
+            mask = np.array([[0, 1, 0], [1, -4, 1], [0, 1, 0]])
+
+        print('mask shape = ', mask.shape)
+        img = conv.convolution(conv, img, mask)
+        result = self.img_addition(org, img)
         result = self.post_process_image(result)
 
         return result
 
-    # def convolution(self, img, mask):
-    #     conv = ConvolutionCorrelationController.ConvolutionCorrelationController()
-    #     img = conv.convolt(img, mask)
-    #     img = conv.zero_cropping(img, mask)
-    #
-    #     return img
+    def img_addition(self, org, mask):
+        w, h = org.shape
+        result = np.zeros([w,h])
+        for i in range(w):
+            for j in range(h):
+                result[i, j] = org[i, j] + mask[i, j]*0.1
+
+        return result
 
     def post_process_image(self, image):
 
