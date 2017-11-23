@@ -28,8 +28,9 @@
                                 <span class="select is-fullwidth">
                                     <label>
                                         <select id="operation" name="operation" class="param">
-                                            <option value="correlation">Correlation and Convolution</option>
-                                            <option selected="selected" value="smoothing">Image smoothing</option>
+                                            <option selected="selected" value="convolution">Convolution</option>
+                                            <option value="correlation">Correlation</option>
+                                            <option value="smoothing">Image smoothing</option>
                                             <optgroup label="Sharpening">
                                                 <option value="laplacian">Laplacian</option>
                                                 <option value="unsharp">Unsharp mask and high boost</option>
@@ -51,7 +52,6 @@
                                             <option value="gaussian_noise.png">gaussian_noise</option>
                                             <option value="saltandpepper_noise.png">saltandpepper_noise</option>
                                             <option value="salt-and-pepper-dog.png">Salty Dog</option>
-                                            <option value="7x7dog.png">Blurry dog</option>
                                         </select>
                                     </label>
                                 </span>
@@ -90,19 +90,6 @@
                                                 <select id="smoothing-filter" name="smoothing-filter" class="param">
                                                     <option selected="selected" value="1_9">1/9</option>
                                                     <option value="1_16">1/16</option>
-                                                </select>
-                                            </label>
-                                        </span>
-                                    </div>
-                                    <div class="field k-size-wrapper">
-                                        <p>K Size</p>
-                                        <span class="select is-fullwidth">
-                                            <label>
-                                                <select id="kSize" name="kSize" class="param">
-                                                    <option value="3">3</option>
-                                                    <option selected="selected" value="5">5</option>
-                                                    <option value="7">7</option>
-                                                    <option value="9">9</option>
                                                 </select>
                                             </label>
                                         </span>

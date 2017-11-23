@@ -1,6 +1,6 @@
-from __future__ import unicode_literals, print_function, generators, division
 import numpy as np
 import cv2
+# from __future__ import unicode_literals, print_function, generators, division
 from scipy import signal
 from view import View
 
@@ -10,156 +10,174 @@ from view import View
 
 class ConvolutionCorrelationController:
     def ConvolutionInitial(self, params):
+        print('hit')
         image_path = 'controllers/assets/images/' + params['image']
         image = cv2.imread(image_path, 0)
         conv = ConvolutionCorrelationController()
-        output = conv.convolution(image)
+        output = conv.convolution(conv, image)
+        output = output.astype(np.uint8)
 
         image_output_path = 'controllers/assets/images/out/' + params['image']
         cv2.imwrite(image_output_path, output)
         view = View()
-        output = view.render(message = [image_output_path])
+        output = view.render(message=[image_output_path])
         return '200 okay', output
 
     def CorrelationInitial(self, params):
         image_path = 'controllers/assets/images/' + params['image']
         image = cv2.imread(image_path, 0)
-        conv = ConvolutionCorrelationController()
-        output = conv.correlation(image)
+        output = self.correlation(image)
+        output = output.astype(np.uint8)
 
         image_output_path = 'controllers/assets/images/out/' + params['image']
         cv2.imwrite(image_output_path, output)
         view = View()
-        output = view.render(message = [image_output_path])
+        output = view.render(message=[image_output_path])
         return '200 okay', output
 
-    def convolution(self, image = None, mask = None):
+    def convolution(self, image, mask):
         # input: orginal image and mask
         # output: image after convolution
-        if image is None:
-            image_path = 'controllers/assets/images/'
-            image = cv2.imread(image_path, 0)
+        # if image is None:
+        #     image_path = 'controllers/assets/images/'
+        #     image = cv2.imread(image_path, 0)
+        #
+        # if mask is None:
+        #     np.array([[0, -1, 1]])
+        print(type(self))
 
-        if mask is None:
-            mask = np.array([[1, 2, 1],
-                             [2, 4, 2],
-                             [1, 2, 1]], dtype = float
-                            ) / 16
+        conv = ConvolutionCorrelationController()
+        image = conv.convolt(image, mask)
 
-        image = self.convolt(image, mask)
-        image = self.zero_cropping(image, mask)
+        return image
+        #return image.astype(np.uint8)
 
-        # return image
-        return image.astype(np.uint8)
-
-    def correlation(self, image = None, mask = None):
+    def correlation(self, image, mask):
         # input: orginal image and mask
         # output: image after correlation
-        if image is None:
-            image_path = 'controllers/assets/images/'
-            image = cv2.imread(image_path, 0)
-
-        if mask is None:
-            mask = np.array([[1, 2, 1],
-                             [2, 4, 2],
-                             [1, 2, 1]], dtype = float
-                            ) / 16
+        # if image is None:
+        #     image_path = 'controllers/assets/images/'
+        #     image = cv2.imread(image_path, 0)
+        #
+        # if mask is None:
+        #     mask = np.array([[0, -1, 1]])
 
         image = self.convolt(image, mask)
-        image = self.zero_cropping(image, mask)
-        # return image
-        return image.astype(np.uint8)
 
-    def zero_padding(self, org, mask):
-        w, h = mask.shape
-        print('org padding')
+        return image
 
-        if w is 1:
-            x = (h - 1) / 2
-            for i in range(int(x)):
-                org = np.insert(org, 0, 0, axis = 1)
-                org = np.insert(org, org.shape[1], 0, axis = 1)
-        if h is 1:
-            y = (w - 1) / 2
-            for j in range(int(y)):
-                org = np.insert(org, 0, 0, axis = 0)
-                org = np.insert(org, org.shape[0], 0, axis = 0)
+    def zero_padding(self, org, size):
+        w, h = org.shape
+        print("zero padding")
+        print(w, h)
+        print(size)
+        m = int(w + 2 * size)
+        n = int(h + 2 * size)
+        temp = np.zeros((m, n), dtype=int)
 
-        x = (w - 1) / 2
-        y = (h - 1) / 2
-
-        if w is not 1 and h is not 1:
-            for i in range(int(x)):
-                org = np.insert(org, 0, 0, axis = 1)
-                org = np.insert(org, org.shape[1], 0, axis = 1)
-            for j in range(int(y)):
-                org = np.insert(org, 0, 0, axis = 0)
-                org = np.insert(org, org.shape[0], 0, axis = 0)
+        for i in range(size, w + size):
+            for j in range(size, h + size):
+                temp[i, j] = org[i - size, j - size]
 
         print('after padding')
+        print(temp.shape)
+        return temp
 
-        return org
+    def mask_rotate(self, mask):
+        w, h = mask.shape
+        temp = np.zeros([w, h])
+        for i in range(w):
+            for j in range(h):
+                temp[i, j] = mask[w - i - 1, h - j - 1]
+
+        return temp
 
     def convolt(self, img, mask):
-        print('convolt')
 
-        mask = np.rot90(mask, 2)
-        mw, mh = mask.shape
-        img = self.zero_padding(img, mask)
         w, h = img.shape
-        offset = int((mw - 1) / 2)
-        temp = np.zeros([w, h], dtype = float)
+        print(w, h)
+        mw, mh = mask.shape
+
+        if mw < mh:
+            size = int((mh - 1) / 2)
+            for i in range(size):
+                mask = np.insert(mask, 0, 0, axis=0)
+                mask = np.insert(mask, mask.shape[0], 0, axis=0)
+        elif mw > mh:
+            size = int((mw - 1) / 2)
+            for i in range(size):
+                mask = np.insert(mask, 0, 0, axis=1)
+                mask = np.insert(mask, mask.shape[1], 0, axis=1)
+        mw, mh = mask.shape
+        print(mask)
+        # mask = np.rot90(mask, 2)
+        size = (mw - 1) / 2
+        print("size = ", size)
+        img = self.zero_padding(img, int(size))
+        mask = self.mask_rotate(mask)
+        w, h = img.shape
+        offset = int((len(mask) - 1) / 2)
+
+        temp = np.zeros([w, h], dtype=float)
         for i in range(w - offset - 1):
             for j in range(h - offset - 1):
                 subImg = img[i:i + mw, j:j + mh]
 
                 temp[i + offset, j + offset] = np.sum(np.multiply(subImg, mask))
-        print("after convolution")
-        return temp
+        temp = temp.astype(np.uint8)
+        print('size type = ', type(size))
+        image = self.zero_cropping(temp, int(size))
+
+        return image
 
     def correlate(self, img, mask):
-        img = self.zero_padding(img, mask)
+
         w, h = img.shape
         mw, mh = mask.shape
-        offset = int((mw - 1) / 2)
-        temp = np.zeros([w, h], dtype = float)
+
+        if mw < mh:
+            size = int((mh - 1) / 2)
+            for i in range(size):
+                mask = np.insert(mask, 0, 0, axis=0)
+                mask = np.insert(mask, mask.shape[0], 0, axis=0)
+        elif mw > mh:
+            size = int((mw - 1) / 2)
+            for i in range(size):
+                mask = np.insert(mask, 0, 0, axis=1)
+                mask = np.insert(mask, mask.shape[1], 0, axis=1)
+
+        mw, mh = mask.shape
+        img = self.zero_padding(img, mask)
+
+        offset = int((len(mask) - 1) / 2)
+
+        temp = np.zeros([w, h], dtype=float)
         for i in range(w - offset - 1):
             for j in range(h - offset - 1):
                 subImg = img[i:i + mw, j:j + mh]
 
                 temp[i + offset, j + offset] = np.sum(np.multiply(subImg, mask))
-        return temp
 
-    def zero_cropping(self, org, mask):
+        return temp.astype(np.uint8)
+
+    def zero_cropping(self, org, size):
+        w, h = org.shape
+
         print('org cropping')
+        print(w, h)
+        print(type(size))
+        m = w - 2 * size
+        n = h - 2 * size
+        print(m, n)
 
-        w, h = mask.shape
+        temp = np.zeros([int(m), int(n)])
+        print(temp.shape)
 
-        if w is 1:
-            x = (h - 1) / 2 + 1
-            for i in range(int(x)):
-                org = np.delete(org, 0, 1)
-                org = np.delete(org, org.shape[1] - 1, 1)
-        if h is 1:
-            y = (w - 1) / 2 + 1
-            for j in range(int(y)):
-                org = np.delete(org, 0, 0)
-                org = np.delete(org, org.shape[0] - 1, 0)
-
-        x = (w - 1) / 2 + 1
-        y = (h - 1) / 2 + 1
-
-        if w is not 1 and h is not 1:
-            for i in range(int(x)):
-                org = np.delete(org, 0, 1)
-                org = np.delete(org, org.shape[1] - 1, 1)
-            for j in range(int(y)):
-                org = np.delete(org, 0, 0)
-                org = np.delete(org, org.shape[0] - 1, 0)
-
-        print('after cropping')
-
-        return org
+        for i in range(0, m):
+            for j in range(0, n):
+                temp[i, j] = org[i + size, j + size]
+        print("after cropping")
+        return temp
 
     def test(self):
 
@@ -174,11 +192,11 @@ class ConvolutionCorrelationController:
                      )
         w = np.array([[1, 2, 1],
                       [2, 4, 2],
-                      [1, 2, 1]], dtype = float
+                      [1, 2, 1]], dtype=float
                      )
         w_1 = np.array([[1, 1, 1],
                         [1, 1, 1],
-                        [1, 1, 1]], dtype = float)
+                        [1, 1, 1]], dtype=float)
 
         y = signal.convolve2d(x, w / 16, 'valid')
 
