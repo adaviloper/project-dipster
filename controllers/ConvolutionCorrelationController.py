@@ -13,7 +13,7 @@ class ConvolutionCorrelationController:
         image_path = 'controllers/assets/images/' + params['image']
         image = cv2.imread(image_path, 0)
         conv = ConvolutionCorrelationController()
-        output = conv.convolution(conv, image)
+        output = conv.convolution(image)
         output = output.astype(np.uint8)
 
         image_output_path = 'controllers/assets/images/out/' + params['image']
@@ -25,7 +25,8 @@ class ConvolutionCorrelationController:
     def CorrelationInitial(self, params):
         image_path = 'controllers/assets/images/' + params['image']
         image = cv2.imread(image_path, 0)
-        output = self.correlation(image)
+        corr = ConvolutionCorrelationController()
+        output = corr.correlation(image)
         output = output.astype(np.uint8)
 
         image_output_path = 'controllers/assets/images/out/' + params['image']
@@ -49,7 +50,7 @@ class ConvolutionCorrelationController:
         image = conv.convolt(image, mask)
 
         return image
-        #return image.astype(np.uint8)
+        # return image.astype(np.uint8)
 
     def correlation(self, image, mask):
         # input: orginal image and mask
@@ -60,8 +61,8 @@ class ConvolutionCorrelationController:
         #
         # if mask is None:
         #     mask = np.array([[0, -1, 1]])
-
-        image = self.convolt(image, mask)
+        corr = ConvolutionCorrelationController()
+        image = corr.convolt(image, mask)
 
         return image
 
