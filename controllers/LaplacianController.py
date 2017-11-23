@@ -1,7 +1,7 @@
 from __future__ import unicode_literals, print_function, generators, division
 
 from view import View
-# from controllers.ConvolutionController import ConvolutionController as conv
+from controllers.ConvolutionCorrelationController import ConvolutionCorrelationController as conv
 import cv2
 import numpy as np
 
