@@ -1,6 +1,6 @@
-from __future__ import unicode_literals, print_function, generators, division
 import numpy as np
 import cv2
+# from __future__ import unicode_literals, print_function, generators, division
 from scipy import signal
 from view import View
 
@@ -10,6 +10,7 @@ from view import View
 
 class ConvolutionCorrelationController:
     def ConvolutionInitial(self, params):
+        print('hit')
         image_path = 'controllers/assets/images/' + params['image']
         image = cv2.imread(image_path, 0)
         conv = ConvolutionCorrelationController()

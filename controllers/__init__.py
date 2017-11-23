@@ -11,4 +11,5 @@ for loader, name, is_pkg in pkgutil.walk_packages(__path__):
         if name.startswith('__'):
             continue
         globals()[name] = value
-        __all__.append(name)
+        if name not in __all__:
+            __all__.append(name)

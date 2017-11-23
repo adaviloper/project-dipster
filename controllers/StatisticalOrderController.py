@@ -3,7 +3,7 @@ import numpy as np
 import math
 from skimage.exposure import rescale_intensity
 from view import View
-from controllers.ConvolutionCorrelationController import ConvolutionCorrelationController as conv
+# from controllers.ConvolutionController import ConvolutionController as conv
 
 class StatisticalOrderController:
     def filter(self, params):
