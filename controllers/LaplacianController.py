@@ -1,10 +1,10 @@
 from __future__ import unicode_literals, print_function, generators, division
 
+from controllers import ConvolutionCorrelationController
 from view import View
 
 #from controllers.ConvolutionCorrelationController import ConvolutionCorrelationController as conv
 from controllers import ConvolutionCorrelationController
-
 import cv2
 import numpy as np
 
@@ -36,7 +36,6 @@ class LaplacianController:
             mask = np.array([[0, 1, 0], [1, -4, 1], [0, 1, 0]])
 
         print('mask shape = ', mask.shape)
-
         img = ConvolutionCorrelationController.convolution(ConvolutionCorrelationController, img, mask)
         result = self.img_addition(org, img)
         result = self.post_process_image(result)
