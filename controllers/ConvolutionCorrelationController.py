@@ -14,10 +14,10 @@ class ConvolutionCorrelationController:
         image_path = 'controllers/assets/images/' + params['image']
         image = cv2.imread(image_path, 0)
         conv = ConvolutionCorrelationController()
-        output = conv.convolution(conv, image)
+        output = conv.convolution(image)
         output = output.astype(np.uint8)
 
-        image_output_path = 'controllers/assets/images/out/' + params['image']
+        image_output_path = 'controllers/assets/images/out/convolution_' + params['image']
         cv2.imwrite(image_output_path, output)
         view = View()
         output = view.render(message=[image_output_path])
@@ -26,25 +26,26 @@ class ConvolutionCorrelationController:
     def CorrelationInitial(self, params):
         image_path = 'controllers/assets/images/' + params['image']
         image = cv2.imread(image_path, 0)
-        output = self.correlation(image)
+        core = ConvolutionCorrelationController()
+        output = core.correlation(image)
         output = output.astype(np.uint8)
 
-        image_output_path = 'controllers/assets/images/out/' + params['image']
+        image_output_path = 'controllers/assets/images/out/correlation_' + params['image']
         cv2.imwrite(image_output_path, output)
         view = View()
         output = view.render(message=[image_output_path])
         return '200 okay', output
 
-    def convolution(self, image, mask):
+    def convolution(self, image, mask=None):
         # input: orginal image and mask
         # output: image after convolution
         # if image is None:
         #     image_path = 'controllers/assets/images/'
         #     image = cv2.imread(image_path, 0)
         #
-        # if mask is None:
-        #     np.array([[0, -1, 1]])
-        print(type(self))
+        if mask is None:
+            mask = np.array([[0, -1, 1]])
+        print("convolution")
 
         conv = ConvolutionCorrelationController()
         image = conv.convolt(image, mask)
@@ -52,17 +53,20 @@ class ConvolutionCorrelationController:
         return image
         #return image.astype(np.uint8)
 
-    def correlation(self, image, mask):
+    def correlation(self, image, mask=None):
         # input: orginal image and mask
         # output: image after correlation
         # if image is None:
         #     image_path = 'controllers/assets/images/'
         #     image = cv2.imread(image_path, 0)
         #
-        # if mask is None:
-        #     mask = np.array([[0, -1, 1]])
+        if mask is None:
+            mask = np.array([[0], [1], [-1]])
 
-        image = self.convolt(image, mask)
+        print("correlation", mask.shape)
+        corr = ConvolutionCorrelationController()
+        image = corr.correlate(image, mask)
+
 
         return image
 
@@ -93,7 +97,7 @@ class ConvolutionCorrelationController:
         return temp
 
     def convolt(self, img, mask):
-
+        print("convolt")
         w, h = img.shape
         print(w, h)
         mw, mh = mask.shape
@@ -115,6 +119,7 @@ class ConvolutionCorrelationController:
         print("size = ", size)
         img = self.zero_padding(img, int(size))
         mask = self.mask_rotate(mask)
+        print("after rotate", mask)
         w, h = img.shape
         offset = int((len(mask) - 1) / 2)
 
@@ -134,7 +139,7 @@ class ConvolutionCorrelationController:
 
         w, h = img.shape
         mw, mh = mask.shape
-
+        print("correlate", mask)
         if mw < mh:
             size = int((mh - 1) / 2)
             for i in range(size):
@@ -147,18 +152,24 @@ class ConvolutionCorrelationController:
                 mask = np.insert(mask, mask.shape[1], 0, axis=1)
 
         mw, mh = mask.shape
-        img = self.zero_padding(img, mask)
+        size = (mw - 1) / 2
+        print("before padding", mask)
+        img = self.zero_padding(img, int(size))
 
         offset = int((len(mask) - 1) / 2)
 
-        temp = np.zeros([w, h], dtype=float)
+        temp = np.zeros([w, h])
         for i in range(w - offset - 1):
             for j in range(h - offset - 1):
                 subImg = img[i:i + mw, j:j + mh]
 
                 temp[i + offset, j + offset] = np.sum(np.multiply(subImg, mask))
 
-        return temp.astype(np.uint8)
+        temp = temp.astype(np.uint8)
+        print('size type = ', type(size))
+        image = self.zero_cropping(temp, int(size))
+
+        return image
 
     def zero_cropping(self, org, size):
         w, h = org.shape
