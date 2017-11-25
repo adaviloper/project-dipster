@@ -10,6 +10,8 @@ import numpy as np
 
 
 
+
+
 # Call LaplacianInitial function for Laplacian operation
 
 class LaplacianController:
