@@ -34,6 +34,7 @@ http://localhost:3000
            "img shape before zero padding", w, h
            'img shape after padding'
            "mask shape", mask.shape
+           "print mask"
            'zero cropping'
            "img shape before zero cropping", w, h
            "img after cropping"
