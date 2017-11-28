@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from skimage.exposure import rescale_intensity
 from view import View
-
+from controllers import ConvolutionCorrelationController
 
 # primary method to be called imagesmoothing. For example: smoothing_obj = imageSmoothing(image, windowSize)
 class SmoothingController:
@@ -28,31 +28,14 @@ class SmoothingController:
 
         kernel = kernel / sum
 
-        # get dimentions of input image and kernel
-        (iH, iW) = input_image.shape[:2]
-        (kH, kW) = kernel.shape[:2]
-
-        # Does zero padding
-        pad = int((kW - 1) / 2)
-        image = cv2.copyMakeBorder(input_image, pad, pad, pad, pad,
-                                   cv2.BORDER_REPLICATE)
-        output = np.zeros((iH, iW), dtype = "float32")
-
-        # performs actual convolution by sliding kernal over image
-        for y in np.arange(pad, iH + pad):
-            for x in np.arange(pad, iW + pad):
-                roi = image[y - pad:y + pad + 1, x - pad:x + pad + 1]
-
-                k = (roi * kernel).sum()
-
-                output[y - pad, x - pad] = k
+        img = ConvolutionCorrelationController.convolution(ConvolutionCorrelationController, input_image, kernel)
 
         # rescale the output image to be in the range [0, 255]
-        output = rescale_intensity(output, in_range = (0, 255))
+        output = rescale_intensity(img, in_range = (0, 255))
         output = (output * 255).astype("uint8")
 
         # saves output and displays it on the page
-        image_output_path = 'controllers/assets/images/out/' + str(windowSize) + 'x' + str(windowSize) + params['image']
+        image_output_path = 'controllers/assets/images/out/' + str(windowSize) + 'x' + str(windowSize) + 'mean_filter_'+ params['image']
         cv2.imwrite(image_output_path, output)
         view = View()
         output = view.render(message = [image_output_path])
