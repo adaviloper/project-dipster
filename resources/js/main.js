@@ -82,7 +82,7 @@ class Form {
             this.toggleDisplay(name, 'none');
         });
         if(this.filterParams.operationType === 'smoothing') {
-            this.toggleDisplay('smoothing-filter', 'block');
+            // this.toggleDisplay('smoothing-filter', 'block');
             this.toggleDisplay('window-size', 'block');
         } else if(this.filterParams.operationType === 'statistical-order-filtering') {
             this.toggleDisplay('statistical-filter', 'block');
