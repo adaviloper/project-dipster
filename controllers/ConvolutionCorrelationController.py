@@ -139,9 +139,6 @@ class ConvolutionCorrelationController:
         for i in range(w - offset - int(mw/2)):
             for j in range(h - offset - int(mh/2)):
                 subImg = img[i:i + mw, j:j + mh]
-                if subImg.shape == (5, 4):
-                    print(i, j, subImg)
-
 
                 temp[i + offset, j + offset] = int(np.sum(np.multiply(subImg, mask)))
 
@@ -173,8 +170,8 @@ class ConvolutionCorrelationController:
         offset = int((len(mask) - 1) / 2)
 
         temp = np.zeros([w, h])
-        for i in range(w - offset - 2):
-            for j in range(h - offset - 2):
+        for i in range(w - offset - int(mw/2)):
+            for j in range(h - offset - int(mh/2)):
                 subImg = img[i:i + mw, j:j + mh]
 
                 temp[i + offset, j + offset] = int(np.sum(np.multiply(subImg, mask)))
