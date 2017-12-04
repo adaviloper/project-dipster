@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from skimage.exposure import rescale_intensity
 from view import View
+from controllers import SmoothingController
 
 class UnsharpMaskingAndHighBoostingController:
 

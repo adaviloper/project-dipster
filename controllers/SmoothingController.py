@@ -3,6 +3,9 @@ import numpy as np
 from skimage.exposure import rescale_intensity
 from view import View
 from controllers import ConvolutionCorrelationController
+import time
+from scipy import signal
+
 
 # primary method to be called imagesmoothing. For example: smoothing_obj = imageSmoothing(image, windowSize)
 class SmoothingController:
@@ -11,7 +14,6 @@ class SmoothingController:
     def smoothing(self, params):
 
         image_path = 'controllers/assets/images/' + params['image']
-
         input_image = cv2.imread(image_path, 0)
 
         # gets Windowsize from params
@@ -21,14 +23,20 @@ class SmoothingController:
         kernel = np.ones((windowSize, windowSize), dtype = "float")
         (iH, iW) = kernel.shape[:2]
 
+        #creates kernel
         sum = 0
         for c in range(iH):
             for r in range(iW):
                 sum = sum + kernel[c][r]
 
         kernel = kernel / sum
-
+        #used to time code t0 =  time.time()
         img = ConvolutionCorrelationController.convolution(ConvolutionCorrelationController, input_image, kernel)
+        #img = signal.convolve2d(input_image, kernel, 'valid')
+        #used to time code t1 = time.time()
+
+        #totalTime = t1-t0
+        #print("Total time is ", totalTime)
 
         # rescale the output image to be in the range [0, 255]
         output = rescale_intensity(img, in_range = (0, 255))
