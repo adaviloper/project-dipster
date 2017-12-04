@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from skimage.exposure import rescale_intensity
+from controllers import ConvolutionCorrelationController
 from view import View
 
 class UnsharpMaskingAndHighBoostingController:
@@ -14,38 +15,51 @@ class UnsharpMaskingAndHighBoostingController:
         # gets Windowsize from params
         windowSize = params['windowSize']
         windowSize = int(windowSize[0])
-        print("window size is ", windowSize)
-        kernel = np.ones((windowSize, windowSize), dtype = "float")
-        (iH, iW) = kernel.shape[:2]
 
-        sum = 0
-        for c in range(iH):
-            for r in range(iW):
-                sum = sum + kernel[c][r]
 
-        kernel = kernel / sum
+        if params['unsharpFilterType'] == 'average':
+            print("window size is ", windowSize)
 
-        # get dimentions of input image and kernel
-        (iH, iW) = input_image.shape[:2]
-        (kH, kW) = kernel.shape[:2]
+            kernel = np.ones((windowSize, windowSize), dtype="float")
+            (iH, iW) = kernel.shape[:2]
 
-        # Does zero padding
-        pad = int((kW - 1) / 2)
-        image = cv2.copyMakeBorder(input_image, pad, pad, pad, pad,
-                                   cv2.BORDER_REPLICATE)
-        output = np.zeros((iH, iW), dtype = "float32")
+            sum = 0
+            for c in range(iH):
+                for r in range(iW):
+                    sum = sum + kernel[c][r]
 
-        # performs actual convolution by sliding kernal over image
-        for y in np.arange(pad, iH + pad):
-            for x in np.arange(pad, iW + pad):
-                roi = image[y - pad:y + pad + 1, x - pad:x + pad + 1]
+            kernel = kernel / sum
+        elif params['filterType'] == 'gaussian':
+            # print('Gaussian')
 
-                k = (roi * kernel).sum()
+            windowSize = params['windowSize']
+            windowSize = int(windowSize[0])
+            print("window size is ", windowSize)
 
-                output[y - pad, x - pad] = k
+            if windowSize == 3:
+                kernel = np.matrix([[1, 2, 1],
+                                    [2, 4, 2],
+                                    [1, 2, 1]])
+                kernel = kernel / 16
+
+                (kH, kW) = (3, 3)
+
+            elif windowSize == 5:
+                kernel = np.matrix([[1, 4, 6, 4, 1],
+                                    [4, 16, 24, 16, 4],
+                                    [6, 24, 36, 24, 6],
+                                    [4, 16, 24, 16, 4],
+                                    [1, 4, 6, 4, 1]])
+                kernel = kernel / 256
+                (kH, kW) = (5, 5)
+            else:
+                print('Choose a kernel size with either 3 or 5')
+
+
+        img = ConvolutionCorrelationController.convolution(ConvolutionCorrelationController, input_image, kernel)
 
         # rescale the output image to be in the range [0, 255]
-        output = rescale_intensity(output, in_range = (0, 255))
+        output = rescale_intensity(img, in_range = (0, 255))
         output = (output * 255).astype("uint8")
 
         return output
