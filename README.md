@@ -21,3 +21,23 @@ http://localhost:3000
 2. Add a comment to the primary method of your class that needs to be called so that I can add it to the list of routes and the form calls
 3. Add any images that you use to the /controllers/assets/images directory
 4. Update your image outputs to be sent to the /controllers/assets/images/out directory
+
+
+### Instruction to call convolution from ConvolutionCorrelationController
+1. Add import statement: from controllers import ConvolutionCorrelationController
+2. input: img, mask(window matrix)
+3. ouput: img after convolution
+4. img = ConvolutionCorrelationController.convolution(ConvolutionCorrelationController, img, mask)
+5. test: you will see print information like below:
+           "start convolution"
+           "zero padding"
+           "img shape before zero padding", w, h
+           'img shape after padding'
+           "mask shape", mask.shape
+           "print mask"
+           'zero cropping'
+           "img shape before zero cropping", w, h
+           "img after cropping"
+           "convolution done"
+    These print informations for you to  print related information and locate bugs. I will comment them before
+    we submit to keep the code clean

@@ -1,9 +1,15 @@
 from __future__ import unicode_literals, print_function, generators, division
 
+from controllers import ConvolutionCorrelationController
 from view import View
-# from controllers.ConvolutionController import ConvolutionController as conv
+
+#from controllers.ConvolutionCorrelationController import ConvolutionCorrelationController as conv
+from controllers import ConvolutionCorrelationController
 import cv2
 import numpy as np
+
+
+
 
 
 # Call LaplacianInitial function for Laplacian operation
@@ -15,7 +21,7 @@ class LaplacianController:
         lap = LaplacianController()
         output = lap.laplacian(image)
 
-        image_output_path = 'controllers/assets/images/out/' + params['image']
+        image_output_path = 'controllers/assets/images/out/laplacian_' + params['image']
         cv2.imwrite(image_output_path, output)
         view = View()
         output = view.render(message = [image_output_path])
@@ -32,7 +38,7 @@ class LaplacianController:
             mask = np.array([[0, 1, 0], [1, -4, 1], [0, 1, 0]])
 
         print('mask shape = ', mask.shape)
-        img = conv.convolution(conv, img, mask)
+        img = ConvolutionCorrelationController.convolution(ConvolutionCorrelationController, img, mask)
         result = self.img_addition(org, img)
         result = self.post_process_image(result)
 

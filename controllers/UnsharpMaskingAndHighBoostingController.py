@@ -1,31 +1,65 @@
 import cv2
 import numpy as np
-import sys
-
+from skimage.exposure import rescale_intensity
 from view import View
 
-
 class UnsharpMaskingAndHighBoostingController:
-    def get_gaussian_low_pass_filter(self, params):
-        image_path = 'controllers/assets/images/' + params['image']
-        input_image = cv2.imread(image_path, 0)
-        window_size = int(params['windowSize'][0])
-        print("windowSIze:",window_size)
-        gaussian = cv2.GaussianBlur(input_image, (window_size, window_size), 10.0)
-        unsharp_image = cv2.addWeighted(input_image, 1.5, gaussian, -0.5, 0, input_image)
 
-        return unsharp_image
+    def smoothing(self, params):
+
+        image_path = 'controllers/assets/images/' + params['image']
+
+        input_image = cv2.imread(image_path, 0)
+
+        # gets Windowsize from params
+        windowSize = params['windowSize']
+        windowSize = int(windowSize[0])
+        print("window size is ", windowSize)
+        kernel = np.ones((windowSize, windowSize), dtype = "float")
+        (iH, iW) = kernel.shape[:2]
+
+        sum = 0
+        for c in range(iH):
+            for r in range(iW):
+                sum = sum + kernel[c][r]
+
+        kernel = kernel / sum
+
+        # get dimentions of input image and kernel
+        (iH, iW) = input_image.shape[:2]
+        (kH, kW) = kernel.shape[:2]
+
+        # Does zero padding
+        pad = int((kW - 1) / 2)
+        image = cv2.copyMakeBorder(input_image, pad, pad, pad, pad,
+                                   cv2.BORDER_REPLICATE)
+        output = np.zeros((iH, iW), dtype = "float32")
+
+        # performs actual convolution by sliding kernal over image
+        for y in np.arange(pad, iH + pad):
+            for x in np.arange(pad, iW + pad):
+                roi = image[y - pad:y + pad + 1, x - pad:x + pad + 1]
+
+                k = (roi * kernel).sum()
+
+                output[y - pad, x - pad] = k
+
+        # rescale the output image to be in the range [0, 255]
+        output = rescale_intensity(output, in_range = (0, 255))
+        output = (output * 255).astype("uint8")
+
+        return output
+
 
     def unsharpMasking(self, params):
         image_path = 'controllers/assets/images/' + params['image']
 
         input_image = cv2.imread(image_path, 0)
 
-        unsharper = UnsharpMaskingAndHighBoostingController()
         """
         Do any necessary calculations below here
         """
-        smooth_img = unsharper.get_gaussian_low_pass_filter(params)
+        smooth_img = self.smoothing(params)
 
         mask = np.subtract(input_image, smooth_img)
 
