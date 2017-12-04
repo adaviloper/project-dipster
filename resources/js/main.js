@@ -1,6 +1,6 @@
 class Form {
     constructor() {
-        this.toggleable = ['window-size', 'statistical-filter', 'smoothing-filter', 'cutoff', 'order', 'ssim'];
+        this.toggleable = ['window-size', 'unsharp-filter-type', 'statistical-filter', 'smoothing-filter', 'cutoff', 'order', 'ssim'];
         this.filterParams = {};
         this.imageElem = document.getElementById('image');
         this.operationTypeElem = document.getElementById('operation');
@@ -19,6 +19,7 @@ class Form {
         let image = document.getElementById('image').value;
         let cutoff = document.getElementById('cutoff').value || 0;
         let windowSize = document.getElementById('windowSize').value;
+        let unsharpFilterType = document.getElementById('unsharpFilterType').value;
         let statisticalFilter = document.getElementById('statistical-filter').value;
         let smoothingFilter = document.getElementById('smoothing-filter').value;
         let order = document.getElementById('order').value || 2;
@@ -27,6 +28,7 @@ class Form {
             operationType,
             cutoff,
             windowSize,
+            unsharpFilterType,
             statisticalFilter,
             smoothingFilter,
             order
@@ -40,6 +42,7 @@ class Form {
         document.getElementById('cutoff').addEventListener('input', event => this.validateCutoff(event));
         document.getElementById('order').addEventListener('input', event => this.validateOrder(event));
         document.getElementById('windowSize').addEventListener('input', event => this.validateWindowSize(event));
+        document.getElementById('unsharpFilterType').addEventListener('input', event => this.validateUnsharpFilterType(event));
         document.getElementById('statistical-filter').addEventListener('input', event => this.validateStatisticalFilter(event));
         document.getElementById('smoothing-filter').addEventListener('input', event => this.validateSmoothingFilter(event));
         // document.getElementById('ssim').addEventListener('input', event => this.validateSSIM(event));
@@ -52,26 +55,6 @@ class Form {
         document.getElementById('submit').addEventListener('click', () => this.handleSubmit(event));
     }
 
-    /**
-     * Hongwei
-     * Operation: Statistical Order Filter
-     * Params: {
-     *      Filter: [median, mean, adaptive]
-     *      Window Size: [3x3, 5x5, and 7x7]
-     *      SSIM: Integer
-     *
-     * }
-     */
-
-    /**
-     * Tyler Do
-     * For my parameters I just the image, window size, and which mean filter (the 1/9 or (1/16 we discussed on the slides)
-     * Operation: Smoothing
-     * Params: {
-     *      X - Mean Filter: [1/9, 1/16]
-     *      Window Size: [3x3, 5x5, and 7x7]
-     * }
-     */
     updateOperationType(event) {
         this.filterParams.operationType = event.target.value;
         this.toggleOptions();
@@ -81,16 +64,17 @@ class Form {
         this.toggleable.forEach((name) => {
             this.toggleDisplay(name, 'none');
         });
-        if(this.filterParams.operationType === 'smoothing') {
+        if (this.filterParams.operationType === 'smoothing') {
             // this.toggleDisplay('smoothing-filter', 'block');
             this.toggleDisplay('window-size', 'block');
-        } else if(this.filterParams.operationType === 'statistical-order-filtering') {
+        } else if (this.filterParams.operationType === 'statistical-order-filtering') {
             this.toggleDisplay('statistical-filter', 'block');
             this.toggleDisplay('window-size', 'block');
-        } else if(this.filterParams.operationType === 'laplacian') {
-        } else if(this.filterParams.operationType === 'unsharp') {
+        } else if (this.filterParams.operationType === 'laplacian') {
+        } else if (this.filterParams.operationType === 'unsharp') {
             this.toggleDisplay('window-size', 'block');
-        } else if(this.filterParams.operationType === 'first-order-derivatives') {
+            this.toggleDisplay('unsharp-filter-type', 'block');
+        } else if (this.filterParams.operationType === 'first-order-derivatives') {
             this.toggleDisplay('window-size', 'block');
         }
     }
@@ -122,6 +106,15 @@ class Form {
         this.filterParams.windowSize = event.target.value;
     }
 
+    validateUnsharpFilterType(event) {
+        this.filterParams.unsharpFilterType = event.target.value;
+        if(this.filterParams.unsharpFilterType === 'gaussian') {
+            this.toggleDisplay('gaussian-sub', 'none');
+        } else {
+            this.toggleDisplay('gaussian-sub', 'block');
+        }
+    }
+
     validateStatisticalFilter(event) {
         this.filterParams.statisticalFilter = event.target.value;
     }
@@ -142,21 +135,21 @@ class Form {
         $.ajax({
             url: `http://localhost:8080/${this.filterParams.operationType}`,
             data: this.filterParams,
-            success: function(data) {
+            success: function (data) {
                 console.log(data)
                 $('.result-image').remove();
                 let paths = data.slice(1).slice(0, -1).replace("\r\n\r\n", "\n\n").split("\n\n");
                 paths.forEach((path) => {
                     let params = path.split('?')[1];
-                    if(params) {
-                       params = JSON.parse('{"' + decodeURI(params).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+                    if (params) {
+                        params = JSON.parse('{"' + decodeURI(params).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
 
 
                     }
                     let imageHTML = '';
                     imageHTML += '<div class="column result-image">';
                     imageHTML += '<img src="' + path + '" alt="" class="image image-out">';
-                    for(let key in params) {
+                    for (let key in params) {
                         imageHTML += "<strong>" + key + "</strong>: " + params[key] + "<br/>";
                     }
                     imageHTML += '</div>';
