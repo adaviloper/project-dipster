@@ -58,6 +58,17 @@
                             </div>
                             <div class="field is-horizontal">
                                 <div class="field-body">
+                                    <div class="field unsharp-filter-type-wrapper">
+                                        <p>Filter type</p>
+                                        <span class="select is-fullwidth">
+                                            <label>
+                                                <select id="unsharpFilterType" name="unsharpFilterType" class="param">
+                                                    <option selected="selected" value="average">Average</option>
+                                                    <option value="gaussian">Gaussian</option>
+                                                </select>
+                                            </label>
+                                        </span>
+                                    </div>
                                     <div class="field window-size-wrapper">
                                         <p>Window Size</p>
                                         <span class="select is-fullwidth">
@@ -65,8 +76,8 @@
                                                 <select id="windowSize" name="windowSize" class="param">
                                                     <option selected="selected" value="3x3">3x3</option>
                                                     <option value="5x5">5x5</option>
-                                                    <option value="7x7">7x7</option>
-                                                    <option value="9x9">9x9</option>
+                                                    <option class="gaussian-sub-wrapper" value="7x7">7x7</option>
+                                                    <option class="gaussian-sub-wrapper" value="9x9">9x9</option>
                                                 </select>
                                             </label>
                                         </span>

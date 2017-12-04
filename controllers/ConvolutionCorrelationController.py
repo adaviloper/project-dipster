@@ -14,9 +14,13 @@ class ConvolutionCorrelationController:
         image_path = 'controllers/assets/images/' + params['image']
         image = cv2.imread(image_path, 0)
         conv = ConvolutionCorrelationController()
-        #mask = np.array([[1,1,1], [1,1,1], [1,1,1]],dtype=float)
-        output = conv.convolution(image)
+        s = (5, 5)
+        mask = np.ones(s)
+        #mask = np.array([[1,1,1,1,1], [1,1,1,1,1], [1,1,1,1,1], [1,1,1,1,1], [1,1,1,1,1]], dtype=float)
+
+        output = conv.convolution(image, mask/(len(mask)**2))
         output = output.astype(np.uint8)
+        #output = conv.post_process_image(output)
 
         image_output_path = 'controllers/assets/images/out/convolution_' + params['image']
         cv2.imwrite(image_output_path, output)
@@ -116,27 +120,28 @@ class ConvolutionCorrelationController:
                 mask = np.insert(mask, 0, 0, axis=1)
                 mask = np.insert(mask, mask.shape[1], 0, axis=1)
         mw, mh = mask.shape
+
+
+
+        size = (mw - 1) / 2
+
+        img = self.zero_padding(img, int(size))
+        mask = self.mask_rotate(mask)
         print("mask shape", mask.shape)
         print("print mask")
         print(mask)
 
-        # mask = np.rot90(mask, 2)
-        size = (mw - 1) / 2
-        #print("size = ", size)
-        img = self.zero_padding(img, int(size))
-        mask = self.mask_rotate(mask)
-        #print("after rotate", mask)
         w, h = img.shape
+
         offset = int((len(mask) - 1) / 2)
 
         temp = np.zeros([w, h], dtype=float)
-        for i in range(w - offset - 1):
-            for j in range(h - offset - 1):
+        for i in range(w - offset - int(mw/2)):
+            for j in range(h - offset - int(mh/2)):
                 subImg = img[i:i + mw, j:j + mh]
 
-                temp[i + offset, j + offset] = np.sum(np.multiply(subImg, mask))
-        temp = temp.astype(np.uint8)
-        #print('size type = ', type(size))
+                temp[i + offset, j + offset] = int(np.sum(np.multiply(subImg, mask)))
+
         image = self.zero_cropping(temp, int(size))
 
         return image
@@ -165,14 +170,13 @@ class ConvolutionCorrelationController:
         offset = int((len(mask) - 1) / 2)
 
         temp = np.zeros([w, h])
-        for i in range(w - offset - 1):
-            for j in range(h - offset - 1):
+        for i in range(w - offset - int(mw/2)):
+            for j in range(h - offset - int(mh/2)):
                 subImg = img[i:i + mw, j:j + mh]
 
-                temp[i + offset, j + offset] = np.sum(np.multiply(subImg, mask))
+                temp[i + offset, j + offset] = int(np.sum(np.multiply(subImg, mask)))
 
-        temp = temp.astype(np.uint8)
-        #print('size type = ', type(size))
+
         image = self.zero_cropping(temp, int(size))
 
         return image
@@ -230,3 +234,13 @@ class ConvolutionCorrelationController:
         cv2.namedWindow(window_name)
         cv2.imshow(window_name, image)
         cv2.waitKey(0)
+
+    def post_process_image(self, image):
+
+        maxIntensity = image.max()
+        minIntensity = image.min()
+        for i in range(image.shape[0]):
+            for j in range(image.shape[1]):
+                image[i, j] = (256 - 1) / (maxIntensity - minIntensity) * (image[i, j] - minIntensity)
+
+        return image.astype(np.uint8)
