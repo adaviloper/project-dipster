@@ -1,7 +1,8 @@
 import cv2
 import numpy as np
-from skimage.exposure import rescale_intensity
+# from skimage.exposure import rescale_intensity
 from controllers import ConvolutionCorrelationController
+from controllers import LaplacianController
 from view import View
 
 class UnsharpMaskingAndHighBoostingController:
@@ -29,6 +30,7 @@ class UnsharpMaskingAndHighBoostingController:
                     sum = sum + kernel[c][r]
 
             kernel = kernel / sum
+
         elif params['filterType'] == 'gaussian':
             # print('Gaussian')
 
@@ -56,14 +58,23 @@ class UnsharpMaskingAndHighBoostingController:
                 print('Choose a kernel size with either 3 or 5')
 
 
-        img = ConvolutionCorrelationController.convolution(ConvolutionCorrelationController, input_image, kernel)
+        smooth_img = ConvolutionCorrelationController.convolution(ConvolutionCorrelationController, input_image, kernel)
 
-        # rescale the output image to be in the range [0, 255]
-        output = rescale_intensity(img, in_range = (0, 255))
-        output = (output * 255).astype("uint8")
+        # # rescale the output image to be in the range [0, 255]
+        # output = rescale_intensity(smooth_img, in_range = (0, 255))
+        # output = (output * 255).astype("uint8")
 
-        return output
+        return smooth_img
 
+    def post_process_image(self, image):
+
+        maxIntensity = image.max()
+        minIntensity = image.min()
+        for i in range(image.shape[0]):
+            for j in range(image.shape[1]):
+                image[i, j] = (256 - 1) / (maxIntensity - minIntensity) * (image[i, j] - minIntensity)
+
+        return image.astype(np.uint8)
 
     def unsharpMasking(self, params):
         image_path = 'controllers/assets/images/' + params['image']
@@ -79,6 +90,7 @@ class UnsharpMaskingAndHighBoostingController:
 
         result = input_image + 1 * mask
 
+        result = self.post_process_image(result)
         """
         Do any necessary calculations above here
         """
@@ -86,7 +98,7 @@ class UnsharpMaskingAndHighBoostingController:
         smooth_image_output_path = 'controllers/assets/images/out/smooth_' + params['image']
         result_image_output_path = 'controllers/assets/images/out/result_' + params['image']
         # Write your images to those files
-        cv2.imwrite(smooth_image_output_path, smooth_img)
+        cv2.imwrite(smooth_image_output_path, smooth_img.astype("uint8"))
         cv2.imwrite(result_image_output_path, result)
         # Call in the view that the paths will be printed to
         view = View()
