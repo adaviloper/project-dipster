@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 # from skimage.exposure import rescale_intensity
 from controllers import ConvolutionCorrelationController
-from controllers import LaplacianController
 from view import View
 
 class UnsharpMaskingAndHighBoostingController:
