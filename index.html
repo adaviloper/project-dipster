@@ -28,12 +28,12 @@
                                 <span class="select is-fullwidth">
                                     <label>
                                         <select id="operation" name="operation" class="param">
-                                            <option selected="selected" value="convolution">Convolution</option>
+                                            <option value="convolution">Convolution</option>
                                             <option value="correlation">Correlation</option>
                                             <option value="smoothing">Image smoothing</option>
                                             <optgroup label="Sharpening">
                                                 <option value="laplacian">Laplacian</option>
-                                                <option value="unsharp">Unsharp mask and high boost</option>
+                                                <option selected="selected" value="unsharp">Unsharp mask and high boost</option>
                                                 <option value="first-order-derivatives">First order derivatives</option>
                                             </optgroup>
                                             <option value="statistical-order-filtering">Statistical Order Filter</option>
@@ -90,6 +90,30 @@
                                                     <option selected="selected" value="mean">Mean</option>
                                                     <option value="median">Median</option>
                                                     <option value="adaptive">Adaptive</option>
+                                                </select>
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="field high-boost-filter-type-wrapper">
+                                        <p>High Boost</p>
+                                        <span class="select is-fullwidth">
+                                            <label>
+                                                <select id="high-boost-filter-type" name="highBoostingFilterType" class="param">
+                                                    <option selected="selected" value="1">1</option>
+                                                    <option value="1.2">1.2</option>
+                                                    <option value="1.4">1.4</option>
+                                                    <option value="1.6">1.6</option>
+                                                </select>
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="field first-order-filter-type-wrapper">
+                                        <p>Filter type</p>
+                                        <span class="select is-fullwidth">
+                                            <label>
+                                                <select id="first-order-filter-type" name="firstOrderFilterOperator" class="param">
+                                                    <option selected="selected" value="sobel">Sobel</option>
+                                                    <option value="prewitt">Prewitt</option>
                                                 </select>
                                             </label>
                                         </span>

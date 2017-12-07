@@ -1,6 +1,6 @@
 class Form {
     constructor() {
-        this.toggleable = ['window-size', 'unsharp-filter-type', 'statistical-filter', 'smoothing-filter', 'cutoff', 'order', 'ssim'];
+        this.toggleable = ['window-size', 'unsharp-filter-type', 'statistical-filter', 'smoothing-filter', 'cutoff', 'order', 'ssim', 'high-boost-filter-type', 'first-order-filter-type'];
         this.filterParams = {};
         this.imageElem = document.getElementById('image');
         this.operationTypeElem = document.getElementById('operation');
@@ -22,6 +22,8 @@ class Form {
         let unsharpFilterType = document.getElementById('unsharpFilterType').value;
         let statisticalFilter = document.getElementById('statistical-filter').value;
         let smoothingFilter = document.getElementById('smoothing-filter').value;
+        let filterOperator = document.getElementById('first-order-filter-type').value;
+        let highBoostFilterType = document.getElementById('high-boost-filter-type').value;
         let order = document.getElementById('order').value || 2;
         this.filterParams = {
             image,
@@ -31,7 +33,9 @@ class Form {
             unsharpFilterType,
             statisticalFilter,
             smoothingFilter,
-            order
+            order,
+            filterOperator,
+            highBoostFilterType
         };
         $('.source-image').attr('src', '/controllers/assets/images/' + image);
     }
@@ -45,6 +49,8 @@ class Form {
         document.getElementById('unsharpFilterType').addEventListener('input', event => this.validateUnsharpFilterType(event));
         document.getElementById('statistical-filter').addEventListener('input', event => this.validateStatisticalFilter(event));
         document.getElementById('smoothing-filter').addEventListener('input', event => this.validateSmoothingFilter(event));
+        document.getElementById('first-order-filter-type').addEventListener('input', event => this.validateFirstOrderFilterOperator(event));
+        document.getElementById('high-boost-filter-type').addEventListener('input', event => this.validateHighBoostFilterType(event));
         // document.getElementById('ssim').addEventListener('input', event => this.validateSSIM(event));
         // $('#ssim').keypress((event) => {
         //   if ((event.which !== 46 || $('#ssim').val().indexOf('.') !== -1) && (event.which < 48 || event.which > 57)) {
@@ -74,8 +80,9 @@ class Form {
         } else if (this.filterParams.operationType === 'unsharp') {
             this.toggleDisplay('window-size', 'block');
             this.toggleDisplay('unsharp-filter-type', 'block');
+            this.toggleDisplay('high-boost-filter-type', 'block');
         } else if (this.filterParams.operationType === 'first-order-derivatives') {
-            this.toggleDisplay('window-size', 'block');
+            this.toggleDisplay('first-order-filter-type', 'block');
         }
     }
 
@@ -121,6 +128,14 @@ class Form {
 
     validateSmoothingFilter(event) {
         this.filterParams.smoothingFilter = event.target.value;
+    }
+
+    validateFirstOrderFilterOperator(event) {
+        this.filterParams.firstOrderFilterOperator = event.target.value;
+    }
+
+    validateHighBoostFilterType(event) {
+        this.filterParams.highBoostFilterType = event.target.value;
     }
 
     updateParams() {
