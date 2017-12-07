@@ -83,29 +83,27 @@ class UnsharpMaskingAndHighBoostingController:
         input_image = cv2.imread(image_path, 0)
 
         boost = params['boostRate']
-        """
-        Do any necessary calculations below here
-        """
+
+        #Compute image smoothing
         smooth_img = self.smoothing(params)
 
+        #Generate the mask
         mask = np.subtract(input_image, smooth_img)
 
+        #Boost the image with the appropriate value
         result = input_image + boost * mask
 
         result = self.post_process_image(result)
-        """
-        Do any necessary calculations above here
-        """
+
         # Leave these image paths as the path to the file names that the outputs should be saved to
         smooth_image_output_path = 'controllers/assets/images/out/smooth_' + params['image']
         result_image_output_path = 'controllers/assets/images/out/result_' + params['image']
-        # Write your images to those files
+
+        # Write the images to the controller path
         cv2.imwrite(smooth_image_output_path, smooth_img.astype("uint8"))
         cv2.imwrite(result_image_output_path, result)
+
         # Call in the view that the paths will be printed to
         view = View()
-        # message is an array that lists all of the image paths
-        # There is no need to pass the original image as that will always be displayed
-        # Should return [input_image, smooth_img, result]
         output = view.render(message=[smooth_image_output_path, result_image_output_path])
         return '200 okay', output
