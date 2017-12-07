@@ -17,9 +17,11 @@ class UnsharpMaskingAndHighBoostingController:
         windowSize = int(windowSize[0])
 
         # gets Boosting rate
-        boost = params['boostRate']
+        boost = params['highBoostFilterType']
 
-        if params['unsharpFilterType'] == 'average':
+        #Get FilterType
+        filterType = params['unsharpFilterType']
+        if filterType == 'average':
             print("window size is ", windowSize)
 
             kernel = np.ones((windowSize, windowSize), dtype="float")
@@ -32,7 +34,7 @@ class UnsharpMaskingAndHighBoostingController:
 
             kernel = kernel / sum
 
-        elif params['filterType'] == 'gaussian':
+        elif filterType == 'gaussian':
             # print('Gaussian')
 
             windowSize = params['windowSize']
@@ -82,7 +84,7 @@ class UnsharpMaskingAndHighBoostingController:
 
         input_image = cv2.imread(image_path, 0)
 
-        boost = params['boostRate']
+        boost = params['highBoostFilterType']
 
         #Compute image smoothing
         smooth_img = self.smoothing(params)
