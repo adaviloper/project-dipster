@@ -4,8 +4,8 @@ import numpy as np
 from controllers import ConvolutionCorrelationController
 from view import View
 
-class UnsharpMaskingAndHighBoostingController:
 
+class UnsharpMaskingAndHighBoostingController:
     def smoothing(self, params):
 
         image_path = 'controllers/assets/images/' + params['image']
@@ -19,12 +19,12 @@ class UnsharpMaskingAndHighBoostingController:
         # gets Boosting rate
         boost = params['highBoostFilterType']
 
-        #Get FilterType
+        # Get FilterType
         filterType = params['unsharpFilterType']
         if filterType == 'average':
             print("window size is ", windowSize)
 
-            kernel = np.ones((windowSize, windowSize), dtype="float")
+            kernel = np.ones((windowSize, windowSize), dtype = "float")
             (iH, iW) = kernel.shape[:2]
 
             sum = 0
@@ -60,7 +60,6 @@ class UnsharpMaskingAndHighBoostingController:
             else:
                 print('Choose a kernel size with either 3 or 5')
 
-
         smooth_img = ConvolutionCorrelationController.convolution(ConvolutionCorrelationController, input_image, kernel)
 
         # # rescale the output image to be in the range [0, 255]
@@ -80,26 +79,27 @@ class UnsharpMaskingAndHighBoostingController:
         return image.astype(np.uint8)
 
     def unsharpMasking(self, params):
+        unsharpMasking = UnsharpMaskingAndHighBoostingController()
         image_path = 'controllers/assets/images/' + params['image']
 
         input_image = cv2.imread(image_path, 0)
 
-        boost = params['highBoostFilterType']
+        boost = float(params['highBoostFilterType'])
 
-        #Compute image smoothing
-        smooth_img = self.smoothing(params)
+        # Compute image smoothing
+        smooth_img = unsharpMasking.smoothing(params)
 
-        #Generate the mask
+        # Generate the mask
         mask = np.subtract(input_image, smooth_img)
 
-        #Boost the image with the appropriate value
+        # Boost the image with the appropriate value
         result = input_image + boost * mask
 
-        result = self.post_process_image(result)
+        result = unsharpMasking.post_process_image(result)
 
         # Leave these image paths as the path to the file names that the outputs should be saved to
-        smooth_image_output_path = 'controllers/assets/images/out/smooth_' + params['image']
-        result_image_output_path = 'controllers/assets/images/out/result_' + params['image']
+        smooth_image_output_path = 'controllers/assets/images/out/smooth_boost' + str(boost) + '_windowSize' + params['windowSize'] + '_' + params['image']
+        result_image_output_path = 'controllers/assets/images/out/result_boost' + str(boost) + '_windowSize' + params['windowSize'] + '_' + params['image']
 
         # Write the images to the controller path
         cv2.imwrite(smooth_image_output_path, smooth_img.astype("uint8"))
@@ -107,5 +107,6 @@ class UnsharpMaskingAndHighBoostingController:
 
         # Call in the view that the paths will be printed to
         view = View()
-        output = view.render(message=[smooth_image_output_path + '?Title=Smoothed_Image', result_image_output_path + '?Title=HighBoosted_Image'])
+        output = view.render(message = [smooth_image_output_path + '?Title=Smoothed_Image',
+                                        result_image_output_path + '?Title=HighBoosted_Image'])
         return '200 okay', output

@@ -43,7 +43,6 @@ class FirstOrderDerivativeController:
 
         return image.astype(np.uint8)
 
-
     def sharpening(self, params):
         image_path = 'controllers/assets/images/' + params['image']
 
@@ -51,8 +50,9 @@ class FirstOrderDerivativeController:
 
         windowSize = 3
         print("windowSize:", windowSize)
+        firstOrder = FirstOrderDerivativeController()
 
-        smooth_img = self.smoothing(params)
+        smooth_img = firstOrder.smoothing(params)
 
         filterOperator = params['filterOperator']
 
@@ -73,8 +73,8 @@ class FirstOrderDerivativeController:
             kernelx = ConvolutionCorrelationController.convolution(ConvolutionCorrelationController, smooth_img, sobelx)
             kernely = ConvolutionCorrelationController.convolution(ConvolutionCorrelationController, smooth_img, sobely)
 
-            kernelx = self.post_process_image(kernelx)
-            kernely = self.post_process_image(kernely)
+            kernelx = firstOrder.post_process_image(kernelx)
+            kernely = firstOrder.post_process_image(kernely)
 
         elif filterOperator == "prewitt":
             # print("prewitt fiter")
@@ -93,8 +93,8 @@ class FirstOrderDerivativeController:
             kernelx = ConvolutionCorrelationController.convolution(ConvolutionCorrelationController, smooth_img, prewittx)
             kernely = ConvolutionCorrelationController.convolution(ConvolutionCorrelationController, smooth_img, prewitty)
 
-            kernelx = self.post_process_image(kernelx)
-            kernely = self.post_process_image(kernely)
+            kernelx = firstOrder.post_process_image(kernelx)
+            kernely = firstOrder.post_process_image(kernely)
 
         #Computing the Gradient Magnitude
         gradMag = np.zeros(kernelx.shape)
@@ -106,16 +106,16 @@ class FirstOrderDerivativeController:
 
                 gradMag[i][j] = np.sqrt(np.add(I1 ** 2, I2 ** 2))
 
-        gradMag = self.post_process_image(gradMag)
+        gradMag = firstOrder.post_process_image(gradMag)
 
 
         # Computing the image sharpening
         sharp_img = smooth_img + gradMag
-        sharp_img = self.post_process_image(smooth_img)
+        sharp_img = firstOrder.post_process_image(smooth_img)
 
-        smooth_output_path = 'controllers/assets/images/out/smooth_' + params['image']
-        gradMag_output_path = 'controllers/assets/images/out/gradMag_' + params['image']
-        sharp_output_path = 'controllers/assets/images/out/sharp_' + params['image']
+        smooth_output_path = 'controllers/assets/images/out/smooth_' + filterOperator + '_' + params['image']
+        gradMag_output_path = 'controllers/assets/images/out/gradMag_' + filterOperator + '_' + params['image']
+        sharp_output_path = 'controllers/assets/images/out/sharp_' + filterOperator + '_' + params['image']
 
         cv2.imwrite(smooth_output_path, smooth_img.astype("uint8"))
         cv2.imwrite(gradMag_output_path, gradMag)
