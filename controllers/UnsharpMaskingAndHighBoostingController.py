@@ -16,6 +16,8 @@ class UnsharpMaskingAndHighBoostingController:
         windowSize = params['windowSize']
         windowSize = int(windowSize[0])
 
+        # gets Boosting rate
+        boost = params['boostRate']
 
         if params['unsharpFilterType'] == 'average':
             print("window size is ", windowSize)
@@ -80,6 +82,7 @@ class UnsharpMaskingAndHighBoostingController:
 
         input_image = cv2.imread(image_path, 0)
 
+        boost = params['boostRate']
         """
         Do any necessary calculations below here
         """
@@ -87,7 +90,7 @@ class UnsharpMaskingAndHighBoostingController:
 
         mask = np.subtract(input_image, smooth_img)
 
-        result = input_image + 1 * mask
+        result = input_image + boost * mask
 
         result = self.post_process_image(result)
         """
