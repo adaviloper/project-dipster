@@ -105,5 +105,5 @@ class UnsharpMaskingAndHighBoostingController:
 
         # Call in the view that the paths will be printed to
         view = View()
-        output = view.render(message=[smooth_image_output_path, result_image_output_path])
+        output = view.render(message=[smooth_image_output_path + '?Title=Smoothed_Image', result_image_output_path + '?Title=HighBoosted_Image'])
         return '200 okay', output

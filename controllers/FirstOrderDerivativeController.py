@@ -54,8 +54,10 @@ class FirstOrderDerivativeController:
 
         smooth_img = self.smoothing(params)
 
-        if params['filterType'] == "sobel":
-            print("sobel filter")
+        filterOperator = params['filterOperator']
+
+        if filterOperator == "sobel":
+            # print("sobel filter")
 
             if windowSize == 3:
                 sobelx = np.matrix([[1, 0, -1],
@@ -74,8 +76,8 @@ class FirstOrderDerivativeController:
             kernelx = self.post_process_image(kernelx)
             kernely = self.post_process_image(kernely)
 
-        elif params['filterType'] == "prewitt":
-            print("prewitt fiter")
+        elif filterOperator == "prewitt":
+            # print("prewitt fiter")
 
             if windowSize == 3:
                 prewittx = np.matrix([[-1, 0, 1],
@@ -120,5 +122,5 @@ class FirstOrderDerivativeController:
         cv2.imwrite(sharp_output_path, sharp_img)
 
         view = View()
-        output = view.render(message = [smooth_output_path, gradMag_output_path, sharp_output_path])
+        output = view.render(message = [smooth_output_path + '?Title=Smoothed_Image', gradMag_output_path + '?Title=Gradient_Magnitude_Image', sharp_output_path + '?Title=Sharped_Image'])
         return '200 okay', output
